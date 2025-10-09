@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import { ThemeProvider } from '@/components/theme-provider';
 import { LoadingScreen } from '@/components/loading-screen';
+import { Toaster } from 'sonner';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -152,6 +153,7 @@ export default function RootLayout({
           {/* Content */}
           <div className="relative">
             {children}
+            <Toaster/>
           </div>
         </ThemeProvider>
       </body>

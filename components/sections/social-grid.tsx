@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { Mail, Send, User, MessageSquare, AtSign } from "lucide-react";
+import { toast } from "sonner";
+
 
 interface ContributionDay {
   date: string;
@@ -107,7 +109,7 @@ export function SocialGrid() {
       if (response.ok) {
         // Reset form on success
         setFormData({ name: '', email: '', message: '' });
-        alert('Message sent successfully! I\'ll get back to you soon.');
+        toast('Message sent successfully! I\'ll get back to you soon.');
       } else {
         throw new Error('Failed to send message');
       }
