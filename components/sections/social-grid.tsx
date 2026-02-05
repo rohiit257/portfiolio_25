@@ -92,6 +92,9 @@ export function SocialGrid() {
     setIsSubmitting(true);
     
     try {
+      console.log('=== Social Grid Form Submission ===');
+      console.log('Form data:', formData);
+      
       const response = await fetch('https://n8n-lhkb.onrender.com/webhook/contact-form', {
         method: 'POST',
         headers: {
@@ -102,19 +105,33 @@ export function SocialGrid() {
           email: formData.email,
           message: formData.message,
           timestamp: new Date().toISOString(),
-          source: 'portfolio-website'
+          source: 'portfolio-social-grid'
         }),
       });
 
+      console.log('Response status:', response.status);
+      console.log('Response ok:', response.ok);
+
       if (response.ok) {
+        let data;
+        try {
+          data = await response.json();
+          console.log('Success response:', data);
+        } catch (e) {
+          console.log('Webhook returned non-JSON (OK)');
+        }
+        
         // Reset form on success
         setFormData({ name: '', email: '', message: '' });
         toast('Message sent successfully! I\'ll get back to you soon.');
       } else {
-        throw new Error('Failed to send message');
+        const errorText = await response.text();
+        console.error('Error response:', errorText);
+        throw new Error(`Failed to send: ${response.status}`);
       }
     } catch (error) {
-      console.error('Error sending message:', error);
+      console.error('=== Social Grid Form Submission FAILED ===');
+      console.error('Error:', error);
       alert('Failed to send message. Please try again or contact me directly.');
     } finally {
       setIsSubmitting(false);

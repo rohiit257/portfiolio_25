@@ -10,23 +10,87 @@ export function Contact() {
     message: "",
   });
   const [showDialog, setShowDialog] = useState(false);
+  const [dialogMessage, setDialogMessage] = useState({
+    title: "Message Sent!",
+    description: "Thanks for reaching out! I'll get back to you as soon as possible.",
+    isError: false
+  });
   const [status, setStatus] = useState<"idle" | "sending" | "sent">("idle");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    console.log("=== Form submission started ===");
     setStatus("sending");
     
-    // Simulate form submission
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    
-    setStatus("sent");
-    setShowDialog(true);
-    
-    setTimeout(() => {
-      setShowDialog(false);
+    try {
+      console.log("Form data to send:", formData);
+      console.log("Calling n8n webhook directly...");
+      
+      // Call n8n webhook directly
+      const response = await fetch("https://n8n-lhkb.onrender.com/webhook/contact-form", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          message: formData.message,
+          timestamp: new Date().toISOString(),
+          source: "portfolio-contact-form"
+        }),
+      });
+
+      console.log("Response received!");
+      console.log("Response status:", response.status);
+      console.log("Response ok:", response.ok);
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error("Error response body:", errorText);
+        throw new Error(`Failed to send message: ${response.status}`);
+      }
+      
+      let responseData;
+      try {
+        responseData = await response.json();
+        console.log("Success response data:", responseData);
+      } catch (e) {
+        console.log("Webhook returned non-JSON response (OK)");
+      }
+      console.log("=== Form submission successful ===");
+      
+      setStatus("sent");
+      setDialogMessage({
+        title: "Message Sent!",
+        description: "Thanks for reaching out! I'll get back to you as soon as possible.",
+        isError: false
+      });
+      setShowDialog(true);
+      
+      setTimeout(() => {
+        setShowDialog(false);
+        setStatus("idle");
+        setFormData({ name: "", email: "", message: "" });
+      }, 3000);
+    } catch (error) {
+      console.error("=== Form submission FAILED ===");
+      console.error("Error type:", error instanceof Error ? error.constructor.name : typeof error);
+      console.error("Error message:", error instanceof Error ? error.message : String(error));
+      console.error("Full error object:", error);
+      
       setStatus("idle");
-      setFormData({ name: "", email: "", message: "" });
-    }, 3000);
+      setDialogMessage({
+        title: "Error Sending Message",
+        description: error instanceof Error ? error.message : "Something went wrong. Please try again later or contact me directly.",
+        isError: true
+      });
+      setShowDialog(true);
+      
+      setTimeout(() => {
+        setShowDialog(false);
+      }, 3000);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -127,15 +191,23 @@ export function Contact() {
         </div>
       </div>
 
-      {/* Success Dialog */}
+      {/* Success/Error Dialog */}
       {showDialog && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-sm animate-fade-in">
           <div className="bg-card border border-border rounded-2xl p-6 sm:p-8 max-w-sm w-full shadow-2xl animate-scale-in">
             <div className="flex justify-between items-start mb-4">
-              <div className="h-12 w-12 rounded-full bg-green-500/20 flex items-center justify-center">
-                <svg className="h-6 w-6 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                </svg>
+              <div className={`h-12 w-12 rounded-full flex items-center justify-center ${
+                dialogMessage.isError ? "bg-red-500/20" : "bg-green-500/20"
+              }`}>
+                {dialogMessage.isError ? (
+                  <svg className="h-6 w-6 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                ) : (
+                  <svg className="h-6 w-6 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                )}
               </div>
               <button
                 onClick={() => setShowDialog(false)}
@@ -144,9 +216,9 @@ export function Contact() {
                 <X className="h-5 w-5" />
               </button>
             </div>
-            <h3 className="text-xl font-bold mb-2">Message Sent!</h3>
+            <h3 className="text-xl font-bold mb-2">{dialogMessage.title}</h3>
             <p className="text-muted-foreground text-sm">
-              Thanks for reaching out! I'll get back to you as soon as possible.
+              {dialogMessage.description}
             </p>
           </div>
         </div>
