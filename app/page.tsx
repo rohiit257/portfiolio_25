@@ -30,7 +30,7 @@ export default function Home() {
       <footer className="border-t border-border/40 mt-20 py-8">
         <div className="max-w-5xl mx-auto px-6 md:px-8 lg:px-12">
           <p className="text-center text-sm text-muted-foreground">
-            © {new Date().getFullYear()} rohiit257. crafted with care.
+            © {new Date().getFullYear()} rohit. crafted with care.
           </p>
         </div>
       </footer>
