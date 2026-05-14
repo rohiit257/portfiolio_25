@@ -4,7 +4,6 @@ import { TechStack } from "@/components/sections/tech-stack";
 import { Skills } from "@/components/sections/skills";
 import { SocialGrid } from "@/components/sections/social-grid";
 import { FloatingDock } from "@/components/floating-dock";
-import { StatusIndicator } from "@/components/status-indicator";
 import { Header } from "@/components/header";
 import { Experience } from "@/components/sections/experience";
 import { Contact } from "@/components/sections/contact";
@@ -18,13 +17,13 @@ export default function Home() {
       <div className="max-w-6xl mx-auto px-6 md:px-8 lg:px-12">
         <Introduction />
         <TechStack />
-       
+
         <div className="space-y-0">
+          <Experience />
           <Projects />
         </div>
-        
+
         <SocialGrid />
-      
       </div>
 
       <footer className="border-t border-border/40 mt-20 py-8">

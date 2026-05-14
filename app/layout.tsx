@@ -146,15 +146,15 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          {/* Loading Screen */}
-          <LoadingScreen />
-          {/* Animated background layer */}
-          <div className="bg-animated" />
-          {/* Content */}
-          <div className="relative">
-            {children}
-            <Toaster/>
-          </div>
+          <LoadingScreen>
+            {/* Animated background layer */}
+            <div className="bg-animated" />
+            {/* Content */}
+            <div className="relative">
+              {children}
+              <Toaster/>
+            </div>
+          </LoadingScreen>
         </ThemeProvider>
       </body>
     </html>

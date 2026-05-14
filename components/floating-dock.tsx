@@ -1,15 +1,18 @@
 "use client";
 
-import { Home, FolderGit2, Code2, Linkedin, Mail, FileText, Trophy } from "lucide-react";
+import { Home, FolderGit2, Code2, Linkedin, Mail, FileText, Trophy, Briefcase } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
+import { useLoadingState } from "@/components/loading-screen";
 
 export function FloatingDock() {
 	const [activeItem, setActiveItem] = useState("home");
+	const { isLoading } = useLoadingState();
 
 	const navItems = [
 		{ id: "home", icon: Home, label: "Home", href: "#home" },
 		{ id: "projects", icon: FolderGit2, label: "Projects", href: "#projects" },
+		{ id: "experience", icon: Briefcase, label: "Experience", href: "#experience" },
 		{ id: "skills", icon: Code2, label: "Skills", href: "#skills" },
 	];
 
@@ -21,9 +24,13 @@ export function FloatingDock() {
 	];
 
 	return (
-		<div className="fixed bottom-4 sm:bottom-8 left-1/2 -translate-x-1/2 z-50 animate-scale-in w-full max-w-xs sm:max-w-fit px-2">
+		<div
+			className={`fixed bottom-4 sm:bottom-8 left-1/2 -translate-x-1/2 z-50 w-full max-w-xs sm:max-w-fit px-2 transition-all duration-500 ${
+				isLoading ? "opacity-0 pointer-events-none translate-y-4" : "opacity-100 translate-y-0 animate-scale-in"
+			}`}
+		>
 			<div className="flex items-center gap-1 sm:gap-2 bg-card/80 dark:bg-card/60 backdrop-blur-xl border border-border/50 rounded-xl sm:rounded-2xl px-2 sm:px-4 py-2 sm:py-3 shadow-2xl dark:shadow-zinc-950/50">
-				{navItems.map((item, index) => (
+				{navItems.map((item) => (
 					<div key={item.id} className="relative group">
 						<Button
 							variant="ghost"
@@ -50,7 +57,7 @@ export function FloatingDock() {
 
 				<div className="w-px h-6 sm:h-8 bg-border/50 mx-1 sm:mx-2" />
 
-				{socialLinks.map((link, index) => (
+				{socialLinks.map((link) => (
 					<div key={link.label} className="relative group">
 						<Button
 							variant="ghost"
