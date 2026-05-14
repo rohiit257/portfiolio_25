@@ -60,22 +60,38 @@
   body {
     @apply bg-background text-foreground;
     overflow-x: hidden;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
   html {
     scroll-behavior: smooth;
   }
-  
-  /* Custom text selection color */
-  ::selection {
-    background-color: rgb(16 185 129 / 0.3); /* emerald-500 with opacity */
-    color: rgb(16 185 129); /* emerald-500 */
+
+  /* Subtle dot-grid background */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    background-image:
+      radial-gradient(circle, hsl(var(--border)) 1px, transparent 1px);
+    background-size: 28px 28px;
+    opacity: 0.45;
+    pointer-events: none;
   }
-  
+
+  /* Text selection */
+  ::selection {
+    background-color: rgb(16 185 129 / 0.25);
+    color: inherit;
+  }
   ::-moz-selection {
-    background-color: rgb(16 185 129 / 0.3);
-    color: rgb(16 185 129);
+    background-color: rgb(16 185 129 / 0.25);
+    color: inherit;
   }
 }
+
 
 @layer utilities {
   .glass-effect {

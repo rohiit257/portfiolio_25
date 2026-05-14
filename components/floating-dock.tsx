@@ -1,87 +1,120 @@
 "use client";
 
-import { Home, FolderGit2, Code2, Linkedin, Mail, FileText, Trophy, Briefcase } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useState, useRef } from "react";
+import { Home, FolderGit2, Briefcase, Code2, Trophy, FileText, Linkedin, Mail } from "lucide-react";
 import { useLoadingState } from "@/components/loading-screen";
 
+const NAV = [
+  { id: "home",       icon: Home,       label: "Home",       href: "#home" },
+  { id: "experience", icon: Briefcase,  label: "Experience", href: "#experience" },
+  { id: "projects",   icon: FolderGit2, label: "Projects",   href: "#projects" },
+  { id: "skills",     icon: Code2,      label: "Skills",     href: "#skills" },
+];
+
+const SOCIALS = [
+  { icon: Trophy,   href: "https://leetcode.com/azzyXT",                              label: "LeetCode" },
+  { icon: FileText, href: "/resume.pdf",                                               label: "Resume"   },
+  { icon: Linkedin, href: "https://www.linkedin.com/in/rohit-shahi-152661253/",       label: "LinkedIn" },
+  { icon: Mail,     href: "mailto:rohitshahi581@gmail.com",                           label: "Email"    },
+];
+
+interface DockItemProps {
+  icon: React.ElementType;
+  label: string;
+  href: string;
+  active?: boolean;
+  onClick?: () => void;
+  variant?: "nav" | "social";
+}
+
+function DockItem({ icon: Icon, label, href, active, onClick, variant = "nav" }: DockItemProps) {
+  return (
+    <div className="relative group/item flex flex-col items-center">
+      {/* Tooltip */}
+      <div className="absolute -top-10 left-1/2 -translate-x-1/2 opacity-0 group-hover/item:opacity-100 pointer-events-none transition-all duration-200 group-hover/item:-translate-y-1">
+        <div className="bg-foreground text-background text-[10px] font-medium px-2 py-1 rounded-lg whitespace-nowrap shadow-lg">
+          {label}
+        </div>
+        <div className="w-1.5 h-1.5 bg-foreground rotate-45 mx-auto -mt-1" />
+      </div>
+
+      <a
+        href={href}
+        target={href.startsWith("http") ? "_blank" : "_self"}
+        rel="noopener noreferrer"
+        aria-label={label}
+        onClick={onClick}
+        className={`
+          flex items-center justify-center rounded-xl
+          transition-all duration-200
+          group-hover/item:scale-110 group-hover/item:-translate-y-1
+          active:scale-95
+          ${variant === "nav"
+            ? active
+              ? "h-10 w-10 sm:h-11 sm:w-11 bg-foreground text-background shadow-md"
+              : "h-10 w-10 sm:h-11 sm:w-11 text-muted-foreground hover:text-foreground hover:bg-secondary/60"
+            : "h-8 w-8 sm:h-9 sm:w-9 text-muted-foreground hover:text-foreground hover:bg-secondary/60"
+          }
+        `}
+      >
+        <Icon className={variant === "nav" ? "h-4 w-4" : "h-3.5 w-3.5"} />
+      </a>
+
+      {/* Active dot */}
+      {variant === "nav" && active && (
+        <div className="absolute -bottom-1.5 h-1 w-1 rounded-full bg-foreground" />
+      )}
+    </div>
+  );
+}
+
 export function FloatingDock() {
-	const [activeItem, setActiveItem] = useState("home");
-	const { isLoading } = useLoadingState();
+  const [active, setActive] = useState("home");
+  const { isLoading } = useLoadingState();
 
-	const navItems = [
-		{ id: "home", icon: Home, label: "Home", href: "#home" },
-		{ id: "projects", icon: FolderGit2, label: "Projects", href: "#projects" },
-		{ id: "experience", icon: Briefcase, label: "Experience", href: "#experience" },
-		{ id: "skills", icon: Code2, label: "Skills", href: "#skills" },
-	];
+  return (
+    <div
+      className={`
+        fixed bottom-5 sm:bottom-7 left-1/2 -translate-x-1/2 z-50
+        transition-all duration-500
+        ${isLoading
+          ? "opacity-0 pointer-events-none translate-y-4"
+          : "opacity-100 translate-y-0"
+        }
+      `}
+    >
+      <div className="
+        flex items-center gap-0.5 sm:gap-1
+        bg-card/90 backdrop-blur-xl
+        border border-border/60
+        rounded-2xl
+        px-2 py-2 sm:px-3 sm:py-2.5
+        shadow-xl shadow-black/10
+        dark:shadow-black/40
+      ">
+        {/* Nav items */}
+        <div className="flex items-center gap-0.5 sm:gap-1">
+          {NAV.map((item) => (
+            <DockItem
+              key={item.id}
+              {...item}
+              active={active === item.id}
+              onClick={() => setActive(item.id)}
+              variant="nav"
+            />
+          ))}
+        </div>
 
-	const socialLinks = [
-		{ icon: Trophy, href: "https://leetcode.com/azzyXT", label: "LeetCode" },
-		{ icon: FileText, href: "/resume.pdf", label: "Resume" },
-		{ icon: Linkedin, href: "https://www.linkedin.com/in/rohit-shahi-152661253/", label: "LinkedIn" },
-		{ icon: Mail, href: "mailto:rohitshahi581@gmail.com", label: "Email" },
-	];
+        {/* Divider */}
+        <div className="w-px h-6 bg-border/60 mx-1.5 sm:mx-2 shrink-0" />
 
-	return (
-		<div
-			className={`fixed bottom-4 sm:bottom-8 left-1/2 -translate-x-1/2 z-50 w-full max-w-xs sm:max-w-fit px-2 transition-all duration-500 ${
-				isLoading ? "opacity-0 pointer-events-none translate-y-4" : "opacity-100 translate-y-0 animate-scale-in"
-			}`}
-		>
-			<div className="flex items-center gap-1 sm:gap-2 bg-card/80 dark:bg-card/60 backdrop-blur-xl border border-border/50 rounded-xl sm:rounded-2xl px-2 sm:px-4 py-2 sm:py-3 shadow-2xl dark:shadow-zinc-950/50">
-				{navItems.map((item) => (
-					<div key={item.id} className="relative group">
-						<Button
-							variant="ghost"
-							size="icon"
-							className={`h-10 w-10 sm:h-12 sm:w-12 rounded-lg sm:rounded-xl transition-all duration-300 hover:scale-110 hover:-translate-y-1 hover:shadow-lg hover:shadow-primary/20 ${
-								activeItem === item.id
-									? "bg-primary text-primary-foreground shadow-lg scale-105 -translate-y-0.5"
-									: "hover:bg-primary/10 hover:text-primary"
-							}`}
-							asChild
-							onClick={() => setActiveItem(item.id)}
-						>
-							<a href={item.href} aria-label={item.label}>
-								<item.icon className="h-5 w-5 sm:h-5 sm:w-5 transition-transform duration-300 group-hover:rotate-12" />
-							</a>
-						</Button>
-						<div className="absolute -top-12 sm:-top-14 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none group-hover:-translate-y-1">
-							<div className="bg-foreground text-background text-xs font-medium px-2 py-1 sm:px-3 sm:py-1.5 rounded-lg whitespace-nowrap shadow-lg">
-								<span className="hidden sm:inline">{item.label}</span>
-							</div>
-						</div>
-					</div>
-				))}
-
-				<div className="w-px h-6 sm:h-8 bg-border/50 mx-1 sm:mx-2" />
-
-				{socialLinks.map((link) => (
-					<div key={link.label} className="relative group">
-						<Button
-							variant="ghost"
-							size="icon"
-							className="h-8 w-8 sm:h-10 sm:w-10 rounded-lg sm:rounded-xl transition-all duration-300 hover:scale-125 hover:-translate-y-2 hover:shadow-lg hover:shadow-secondary/20 hover:bg-secondary/10 hover:text-secondary hover:rotate-6"
-							asChild
-						>
-							<a
-								href={link.href}
-								target={link.href.startsWith("http") ? "_blank" : "_self"}
-								rel="noopener noreferrer"
-								aria-label={link.label}
-							>
-								<link.icon className="h-4 w-4 transition-transform duration-300 group-hover:scale-110" />
-							</a>
-						</Button>
-						<div className="absolute -top-12 sm:-top-14 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none group-hover:-translate-y-2">
-							<div className="bg-secondary text-secondary-foreground text-xs font-medium px-2 py-1 sm:px-3 sm:py-1.5 rounded-lg whitespace-nowrap shadow-lg border border-secondary/20">
-								<span className="hidden sm:inline">{link.label}</span>
-							</div>
-						</div>
-					</div>
-				))}
-			</div>
-		</div>
-	);
+        {/* Social icons */}
+        <div className="flex items-center gap-0.5 sm:gap-1">
+          {SOCIALS.map((item) => (
+            <DockItem key={item.label} {...item} variant="social" />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
 }
