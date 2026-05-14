@@ -2,8 +2,14 @@
 
 import { useState, useRef, useEffect, useCallback } from "react";
 import {
-  MessageSquare, X, Send, Bot, User,
-  RotateCcw, ChevronDown, ExternalLink, Zap,
+  MessageSquare,
+  X,
+  Send,
+  Bot,
+  User,
+  RotateCcw,
+  ChevronDown,
+  ExternalLink,
 } from "lucide-react";
 
 interface Message {
@@ -25,36 +31,41 @@ const QUICK = [
 const WELCOME: Message = {
   id: "welcome",
   role: "assistant",
-  content: "Hey! 👋 I'm Rohit's AI. Ask me anything about his work, skills, or projects.",
+  content:
+    "Hey! I'm Rohit's AI. Ask me anything about his work, skills, projects, or contact details.",
 };
 
-// ── Link renderer ───────────────────────────────────────────────────────────
 const URL_RE = /(https?:\/\/[^\s<>"')]+)/g;
 
 function MessageContent({ text }: { text: string }) {
   const parts = text.split(URL_RE);
+
   return (
     <>
-      {parts.map((part, i) => {
+      {parts.map((part, index) => {
         if (/^https?:\/\//.test(part)) {
-          const label = part.replace(/^https?:\/\/(www\.)?/, "").replace(/\/$/, "");
+          const label = part
+            .replace(/^https?:\/\/(www\.)?/, "")
+            .replace(/\/$/, "");
+
           return (
             <a
-              key={i}
+              key={index}
               href={part}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-0.5 text-emerald-500 hover:text-emerald-400 underline underline-offset-2 break-all transition-colors"
+              className="inline-flex items-center gap-1 break-all text-foreground underline underline-offset-4 transition-opacity duration-150 hover:opacity-70"
             >
               {label}
-              <ExternalLink className="h-2.5 w-2.5 shrink-0" />
+              <ExternalLink className="h-3 w-3 shrink-0" />
             </a>
           );
         }
-        return part.split("\n").map((line, j, arr) => (
-          <span key={`${i}-${j}`}>
+
+        return part.split("\n").map((line, lineIndex, array) => (
+          <span key={`${index}-${lineIndex}`}>
             {line}
-            {j < arr.length - 1 && <br />}
+            {lineIndex < array.length - 1 && <br />}
           </span>
         ));
       })}
@@ -62,7 +73,6 @@ function MessageContent({ text }: { text: string }) {
   );
 }
 
-// ── Main component ──────────────────────────────────────────────────────────
 export function Chatbot() {
   const [open, setOpen] = useState(false);
   const [msgs, setMsgs] = useState<Message[]>([WELCOME]);
@@ -71,250 +81,271 @@ export function Chatbot() {
   const [atBottom, setAtBottom] = useState(true);
 
   const scrollRef = useRef<HTMLDivElement>(null);
-  const endRef    = useRef<HTMLDivElement>(null);
-  const inputRef  = useRef<HTMLTextAreaElement>(null);
+  const endRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLTextAreaElement>(null);
 
-  // scroll to bottom
   const toBottom = useCallback(() => {
     endRef.current?.scrollIntoView({ behavior: "smooth" });
   }, []);
 
-  useEffect(() => { if (open) setTimeout(toBottom, 60); }, [msgs, open, toBottom]);
-  useEffect(() => { if (open) setTimeout(() => inputRef.current?.focus(), 200); }, [open]);
+  useEffect(() => {
+    if (open) {
+      window.setTimeout(toBottom, 60);
+    }
+  }, [msgs, open, toBottom]);
 
   useEffect(() => {
-    const fn = (e: KeyboardEvent) => { if (e.key === "Escape") setOpen(false); };
-    window.addEventListener("keydown", fn);
-    return () => window.removeEventListener("keydown", fn);
+    if (open) {
+      window.setTimeout(() => inputRef.current?.focus(), 180);
+    }
+  }, [open]);
+
+  useEffect(() => {
+    const onEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setOpen(false);
+      }
+    };
+
+    window.addEventListener("keydown", onEscape);
+    return () => window.removeEventListener("keydown", onEscape);
   }, []);
 
   const onScroll = () => {
-    const el = scrollRef.current;
-    if (!el) return;
-    setAtBottom(el.scrollHeight - el.scrollTop - el.clientHeight < 50);
+    const element = scrollRef.current;
+    if (!element) return;
+
+    setAtBottom(
+      element.scrollHeight - element.scrollTop - element.clientHeight < 48
+    );
   };
 
-  // send
   const send = async (text: string) => {
-    const t = text.trim();
-    if (!t || loading) return;
+    const trimmed = text.trim();
+    if (!trimmed || loading) return;
 
-    const userMsg: Message = { id: crypto.randomUUID(), role: "user", content: t };
-    const hist = msgs.filter((m) => m.id !== "welcome");
-    setMsgs((p) => [...p, userMsg]);
+    const userMsg: Message = {
+      id: crypto.randomUUID(),
+      role: "user",
+      content: trimmed,
+    };
+
+    const history = msgs.filter((message) => message.id !== "welcome");
+
+    setMsgs((current) => [...current, userMsg]);
     setInput("");
-    if (inputRef.current) { inputRef.current.style.height = "auto"; }
+
+    if (inputRef.current) {
+      inputRef.current.style.height = "auto";
+    }
+
     setLoading(true);
 
     try {
-      const res = await fetch("/api/assistant", {
+      const response = await fetch("/api/assistant", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          message: t,
-          history: hist.map((m) => ({ role: m.role, content: m.content })),
+          message: trimmed,
+          history: history.map((message) => ({
+            role: message.role,
+            content: message.content,
+          })),
         }),
       });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error);
-      setMsgs((p) => [...p, { id: crypto.randomUUID(), role: "assistant", content: data.reply, provider: data.provider }]);
+
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error);
+
+      setMsgs((current) => [
+        ...current,
+        {
+          id: crypto.randomUUID(),
+          role: "assistant",
+          content: data.reply,
+          provider: data.provider,
+        },
+      ]);
     } catch {
-      setMsgs((p) => [...p, { id: crypto.randomUUID(), role: "assistant", content: "Something went wrong. Try rohitshahi581@gmail.com" }]);
+      setMsgs((current) => [
+        ...current,
+        {
+          id: crypto.randomUUID(),
+          role: "assistant",
+          content: "Something went wrong. Try rohitshahi581@gmail.com",
+        },
+      ]);
     } finally {
       setLoading(false);
     }
   };
 
-  const onKey = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); send(input); }
+  const onKey = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (event.key === "Enter" && !event.shiftKey) {
+      event.preventDefault();
+      send(input);
+    }
   };
 
-  const onInput = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setInput(e.target.value);
-    e.target.style.height = "auto";
-    e.target.style.height = `${Math.min(e.target.scrollHeight, 96)}px`;
+  const onInput = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setInput(event.target.value);
+    event.target.style.height = "auto";
+    event.target.style.height = `${Math.min(event.target.scrollHeight, 110)}px`;
   };
 
   return (
     <>
-      {/*
-        ── Chat toggle button
-        bottom-[5.5rem] on mobile sits just above the dock (dock is at bottom-5 + ~52px height ≈ 5.5rem)
-        On sm+ dock is at bottom-7 + ~52px ≈ 6.5rem → use sm:bottom-[6.5rem]
-      */}
       <button
-        onClick={() => setOpen((v) => !v)}
-        aria-label={open ? "Close chat" : "Chat with AI"}
-        className={`
-          fixed z-[60]
-          bottom-[5.5rem] right-4
-          sm:bottom-[6.5rem] sm:right-5
-          h-11 w-11 rounded-2xl
-          flex items-center justify-center
-          border shadow-lg transition-all duration-300
-          ${open
-            ? "bg-card border-border text-foreground rotate-0 scale-100"
-            : "bg-foreground text-background border-transparent hover:scale-110 hover:-translate-y-0.5 hover:shadow-xl"
-          }
-        `}
+        onClick={() => setOpen((current) => !current)}
+        aria-label={open ? "Close chat" : "Open chat"}
+        className={`fixed bottom-4 right-4 z-[60] flex h-12 w-12 items-center justify-center rounded-[1.1rem] border shadow-[0_16px_40px_rgba(0,0,0,0.16)] transition-all duration-300 sm:bottom-5 sm:right-5 ${
+          open
+            ? "border-border/80 bg-card/90 text-foreground backdrop-blur-xl"
+            : "border-border/70 bg-card/92 text-foreground backdrop-blur-xl hover:-translate-y-0.5 hover:scale-105"
+        }`}
       >
-        {open
-          ? <X className="h-4 w-4" />
-          : (
-            <div className="relative">
-              <MessageSquare className="h-4 w-4" />
-              <span className="absolute -top-1 -right-1 h-2 w-2 bg-emerald-500 rounded-full border border-background animate-pulse" />
-            </div>
-          )
-        }
+        {open ? (
+          <X className="h-4 w-4" />
+        ) : (
+          <div className="relative">
+            <MessageSquare className="h-4 w-4" />
+            <span className="absolute -right-1 -top-1 h-2 w-2 rounded-full bg-emerald-500" />
+          </div>
+        )}
       </button>
 
-      {/*
-        ── Chat panel
-        Mobile: rises from the bottom as a sheet
-        Desktop: floating panel above the toggle button
-      */}
       <div
         role="dialog"
         aria-label="AI Assistant"
-        className={`
-          fixed z-[59]
-          /* mobile: full-width bottom sheet */
-          inset-x-0 bottom-0
-          /* desktop: floating panel */
-          sm:inset-x-auto sm:bottom-[8rem] sm:right-5 sm:w-[370px]
-          transition-all duration-300 ease-out origin-bottom-right
-          ${open
-            ? "opacity-100 translate-y-0 pointer-events-auto scale-100"
-            : "opacity-0 translate-y-3 pointer-events-none scale-[0.97]"
-          }
-        `}
+        className={`fixed inset-x-0 bottom-0 z-[59] transition-all duration-300 ease-out sm:inset-x-auto sm:bottom-[5rem] sm:right-5 sm:w-[340px] ${
+          open
+            ? "pointer-events-auto translate-y-0 opacity-100"
+            : "pointer-events-none translate-y-3 opacity-0"
+        }`}
       >
-        <div className="
-          flex flex-col overflow-hidden
-          bg-card/98 backdrop-blur-2xl
-          border border-border
-          shadow-2xl shadow-black/20
-          /* mobile: tall sheet with top corners */
-          h-[80dvh] max-h-[600px] rounded-t-2xl
-          /* desktop: fully rounded, shorter */
-          sm:h-[540px] sm:max-h-none sm:rounded-2xl
-        ">
-
-          {/* ── Header ── */}
-          <div className="flex items-center justify-between px-4 py-3 border-b border-border/50 shrink-0">
-            <div className="flex items-center gap-2.5">
-              <div className="relative h-8 w-8 rounded-xl bg-secondary/60 border border-border/40 flex items-center justify-center">
-                <Bot className="h-3.5 w-3.5" />
-                <span className="absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 bg-emerald-500 rounded-full border-2 border-card" />
+        <div className="flex h-[78dvh] max-h-[640px] flex-col overflow-hidden rounded-t-[1.4rem] border border-border/80 bg-card/95 shadow-[0_26px_70px_rgba(0,0,0,0.28)] backdrop-blur-2xl sm:h-[510px] sm:rounded-[1.4rem]">
+          <div className="flex items-center justify-between border-b border-border/70 px-4 py-3">
+            <div className="flex items-center gap-3">
+              <div className="flex items-center gap-1.5">
+                <span className="h-2.5 w-2.5 rounded-full bg-[#ff5f57]" />
+                <span className="h-2.5 w-2.5 rounded-full bg-[#febc2e]" />
+                <span className="h-2.5 w-2.5 rounded-full bg-[#28c840]" />
               </div>
-              <div>
-                <p className="text-sm font-semibold leading-none">Rohit&apos;s AI</p>
-                <p className="text-[10px] text-muted-foreground mt-0.5 flex items-center gap-1">
-                  <Zap className="h-2.5 w-2.5 text-emerald-500/70" />
-                  Groq · Mistral RAG
+              <div className="space-y-1">
+                <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-muted-foreground">
+                  {"//assistant"}
+                </p>
+                <p className="text-sm font-medium text-foreground">
+                  Rohit&apos;s AI
                 </p>
               </div>
             </div>
 
             <div className="flex items-center gap-1">
               <button
-                onClick={() => { setMsgs([WELCOME]); setInput(""); }}
+                onClick={() => {
+                  setMsgs([WELCOME]);
+                  setInput("");
+                }}
                 aria-label="Reset chat"
-                className="h-7 w-7 rounded-lg flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-secondary/60 transition-all duration-150"
+                className="flex h-8 w-8 items-center justify-center rounded-full border border-transparent text-muted-foreground transition-colors duration-150 hover:border-border/70 hover:bg-secondary/50 hover:text-foreground"
               >
                 <RotateCcw className="h-3.5 w-3.5" />
               </button>
               <button
                 onClick={() => setOpen(false)}
-                aria-label="Close"
-                className="h-7 w-7 rounded-lg flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-secondary/60 transition-all duration-150 sm:hidden"
+                aria-label="Close chat"
+                className="flex h-8 w-8 items-center justify-center rounded-full border border-transparent text-muted-foreground transition-colors duration-150 hover:border-border/70 hover:bg-secondary/50 hover:text-foreground sm:hidden"
               >
                 <X className="h-3.5 w-3.5" />
               </button>
             </div>
           </div>
 
-          {/* ── Messages ── */}
+          <div className="border-b border-border/70 px-4 py-2">
+            <div className="inline-flex items-center gap-2 rounded-full border border-border/70 bg-background/60 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+              Portfolio context active
+            </div>
+          </div>
+
           <div
             ref={scrollRef}
             onScroll={onScroll}
-            className="flex-1 overflow-y-auto px-3 py-3 space-y-3 relative"
+            className="flex-1 space-y-3 overflow-y-auto px-3 py-3"
           >
             {msgs.map((msg) => (
               <div
                 key={msg.id}
-                className={`flex gap-2 items-end ${msg.role === "user" ? "flex-row-reverse" : ""}`}
+                className={`flex items-end gap-2 ${
+                  msg.role === "user" ? "flex-row-reverse" : ""
+                }`}
               >
-                {/* Avatar */}
-                <div className={`h-6 w-6 rounded-lg flex items-center justify-center shrink-0 mb-0.5 text-[10px] ${
-                  msg.role === "user"
-                    ? "bg-foreground text-background"
-                    : "bg-secondary/70 border border-border/40 text-foreground"
-                }`}>
-                  {msg.role === "user" ? <User className="h-3 w-3" /> : <Bot className="h-3 w-3" />}
+                <div
+                  className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-[0.85rem] border text-[10px] ${
+                    msg.role === "user"
+                      ? "border-foreground bg-foreground text-background"
+                      : "border-border/70 bg-secondary/45 text-foreground"
+                  }`}
+                >
+                  {msg.role === "user" ? (
+                    <User className="h-3 w-3" />
+                  ) : (
+                    <Bot className="h-3 w-3" />
+                  )}
                 </div>
 
-                {/* Bubble */}
-                <div className={`
-                  max-w-[78%] text-sm leading-relaxed px-3 py-2 rounded-2xl
-                  ${msg.role === "user"
-                    ? "bg-foreground text-background rounded-br-sm"
-                    : "bg-secondary/40 border border-border/30 text-foreground rounded-bl-sm"
-                  }
-                `}>
+                <div
+                  className={`max-w-[82%] rounded-[1.1rem] px-3 py-2.5 text-[13px] leading-6 ${
+                    msg.role === "user"
+                      ? "rounded-br-sm bg-foreground text-background"
+                      : "rounded-bl-sm border border-border/70 bg-secondary/30 text-foreground"
+                  }`}
+                >
                   <MessageContent text={msg.content} />
                 </div>
               </div>
             ))}
 
-            {/* Typing dots */}
             {loading && (
-              <div className="flex gap-2 items-end">
-                <div className="h-6 w-6 rounded-lg bg-secondary/70 border border-border/40 flex items-center justify-center shrink-0 mb-0.5">
+              <div className="flex items-end gap-2">
+                <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-[0.85rem] border border-border/70 bg-secondary/45 text-foreground">
                   <Bot className="h-3 w-3" />
                 </div>
-                <div className="bg-secondary/40 border border-border/30 rounded-2xl rounded-bl-sm px-4 py-3">
-                  <div className="flex gap-1 items-center">
-                    {[0, 160, 320].map((d) => (
+                <div className="rounded-[1.1rem] rounded-bl-sm border border-border/70 bg-secondary/30 px-4 py-3">
+                  <div className="flex items-center gap-1.5">
+                    {[0, 160, 320].map((delay) => (
                       <span
-                        key={d}
-                        className="h-1.5 w-1.5 bg-muted-foreground/50 rounded-full animate-bounce"
-                        style={{ animationDelay: `${d}ms` }}
+                        key={delay}
+                        className="h-1.5 w-1.5 animate-bounce rounded-full bg-muted-foreground/55"
+                        style={{ animationDelay: `${delay}ms` }}
                       />
                     ))}
                   </div>
                 </div>
               </div>
             )}
+
             <div ref={endRef} />
 
-            {/* Scroll to bottom */}
             {!atBottom && (
               <button
                 onClick={toBottom}
-                className="sticky bottom-2 ml-auto flex h-7 w-7 items-center justify-center rounded-full bg-card border border-border shadow-md text-muted-foreground hover:text-foreground transition-all hover:scale-110"
+                className="sticky bottom-1 ml-auto flex h-8 w-8 items-center justify-center rounded-full border border-border/70 bg-card/95 text-muted-foreground shadow-sm transition-all duration-150 hover:text-foreground"
               >
                 <ChevronDown className="h-3.5 w-3.5" />
               </button>
             )}
           </div>
 
-          {/* ── Quick questions ── */}
-          <div className="px-3 pt-2 pb-1 border-t border-border/40 shrink-0">
-            <div className="flex gap-1.5 overflow-x-auto no-scrollbar pb-1">
+          <div className="border-t border-border/70 px-3 py-2">
+            <div className="flex gap-1.5 overflow-x-auto pb-1 no-scrollbar">
               {QUICK.map((q) => (
                 <button
                   key={q}
                   onClick={() => send(q)}
                   disabled={loading}
-                  className="
-                    whitespace-nowrap text-[10px] px-2.5 py-1 rounded-full shrink-0
-                    border border-border/50 bg-secondary/20 text-muted-foreground
-                    hover:bg-secondary/60 hover:text-foreground hover:border-border
-                    transition-all duration-150 active:scale-95
-                    disabled:opacity-30 disabled:cursor-not-allowed
-                  "
+                  className="shrink-0 rounded-full border border-border/70 bg-secondary/20 px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground transition-colors duration-150 hover:border-foreground/15 hover:bg-secondary/45 hover:text-foreground disabled:cursor-not-allowed disabled:opacity-35"
                 >
                   {q}
                 </button>
@@ -322,37 +353,32 @@ export function Chatbot() {
             </div>
           </div>
 
-          {/* ── Input ── */}
-          <div className="px-3 pb-4 pt-1 shrink-0">
-            <div className="
-              flex items-end gap-2
-              border border-border/50 rounded-xl
-              bg-secondary/20 px-3 py-2
-              focus-within:border-foreground/20 focus-within:bg-secondary/40
-              transition-all duration-150
-            ">
-              <textarea
-                ref={inputRef}
-                value={input}
-                onChange={onInput}
-                onKeyDown={onKey}
-                placeholder="Ask anything about Rohit…"
-                rows={1}
-                disabled={loading}
-                style={{ height: "22px" }}
-                className="flex-1 bg-transparent text-sm resize-none outline-none placeholder:text-muted-foreground/40 leading-relaxed disabled:opacity-40 max-h-[96px]"
-              />
-              <button
-                onClick={() => send(input)}
-                disabled={loading || !input.trim()}
-                aria-label="Send"
-                className="h-7 w-7 rounded-lg flex items-center justify-center bg-foreground text-background shrink-0 transition-all duration-150 hover:opacity-90 hover:scale-105 disabled:opacity-25 disabled:cursor-not-allowed active:scale-95"
-              >
-                <Send className="h-3 w-3" />
-              </button>
+          <div className="px-3 pb-4 pt-2">
+            <div className="rounded-[1.15rem] border border-border/70 bg-background/55 p-2">
+              <div className="flex items-end gap-2">
+                <textarea
+                  ref={inputRef}
+                  value={input}
+                  onChange={onInput}
+                  onKeyDown={onKey}
+                  placeholder="Ask anything about Rohit..."
+                  rows={1}
+                  disabled={loading}
+                  style={{ height: "22px" }}
+                  className="max-h-[110px] flex-1 resize-none bg-transparent px-1 py-1 text-[13px] leading-6 text-foreground outline-none placeholder:text-muted-foreground/55 disabled:opacity-40"
+                />
+                <button
+                  onClick={() => send(input)}
+                  disabled={loading || !input.trim()}
+                  aria-label="Send message"
+                  className="flex h-9 w-9 items-center justify-center rounded-[0.95rem] border border-foreground bg-foreground text-background transition-all duration-150 hover:opacity-88 disabled:cursor-not-allowed disabled:opacity-30"
+                >
+                  <Send className="h-3.5 w-3.5" />
+                </button>
+              </div>
             </div>
-            <p className="text-[9px] text-muted-foreground/30 text-center mt-1 select-none">
-              ↵ send · Shift+↵ newline · Esc close
+            <p className="mt-1.5 text-center font-mono text-[9px] uppercase tracking-[0.14em] text-muted-foreground/45">
+              Enter send · Shift + Enter newline
             </p>
           </div>
         </div>

@@ -1,10 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { createContext, useContext } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 
-// Context to share loading state across components
-export const LoadingContext = createContext<{ isLoading: boolean }>({ isLoading: true });
+export const LoadingContext = createContext<{ isLoading: boolean }>({
+  isLoading: true,
+});
 
 export function useLoadingState() {
   return useContext(LoadingContext);
@@ -15,17 +15,17 @@ export function LoadingScreen({ children }: { children?: React.ReactNode }) {
   const [isFading, setIsFading] = useState(false);
 
   useEffect(() => {
-    const fadeTimer = setTimeout(() => {
+    const fadeTimer = window.setTimeout(() => {
       setIsFading(true);
     }, 1800);
 
-    const hideTimer = setTimeout(() => {
+    const hideTimer = window.setTimeout(() => {
       setIsLoading(false);
     }, 2300);
 
     return () => {
-      clearTimeout(fadeTimer);
-      clearTimeout(hideTimer);
+      window.clearTimeout(fadeTimer);
+      window.clearTimeout(hideTimer);
     };
   }, []);
 
@@ -33,26 +33,59 @@ export function LoadingScreen({ children }: { children?: React.ReactNode }) {
     <LoadingContext.Provider value={{ isLoading }}>
       {isLoading && (
         <div
-          className={`fixed inset-0 z-[100] flex items-center justify-center bg-background transition-opacity duration-500 ${
-            isFading ? "opacity-0 pointer-events-none" : "opacity-100"
+          className={`fixed inset-0 z-[100] flex items-center justify-center bg-background px-4 transition-opacity duration-500 ${
+            isFading ? "pointer-events-none opacity-0" : "opacity-100"
           }`}
         >
-          <div className="flex flex-col items-center space-y-6">
-            {/* Logo/Name */}
-            <div className="text-2xl sm:text-3xl font-bold tracking-tight">
-              <span className="animate-pulse">rohitdebugbugs</span>
+          <div className="relative w-full max-w-xl overflow-hidden rounded-[2rem] border border-border/70 bg-card/90 shadow-[0_30px_120px_rgba(15,23,42,0.16)] backdrop-blur-xl">
+            <div className="flex items-center gap-2 border-b border-border/70 px-5 py-3">
+              <span className="h-3 w-3 rounded-full bg-[#ff5f57]" />
+              <span className="h-3 w-3 rounded-full bg-[#febc2e]" />
+              <span className="h-3 w-3 rounded-full bg-[#28c840]" />
+              <span className="ml-2 font-mono text-[11px] uppercase tracking-[0.22em] text-muted-foreground">
+                booting portfolio.session
+              </span>
             </div>
 
-            {/* Loading dots */}
-            <div className="flex space-x-2">
-              <div className="w-2 h-2 bg-foreground/70 rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
-              <div className="w-2 h-2 bg-foreground/70 rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
-              <div className="w-2 h-2 bg-foreground/70 rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
-            </div>
+            <div className="space-y-8 px-5 py-8 sm:px-8 sm:py-10">
+              <div className="space-y-3">
+                <p className="font-mono text-[11px] uppercase tracking-[0.26em] text-muted-foreground">
+                  {"//initializing workspace"}
+                </p>
+                <div className="space-y-2">
+                  <h1 className="text-3xl font-medium tracking-[-0.05em] text-foreground sm:text-4xl">
+                    Rohit Shahi
+                  </h1>
+                  <p className="font-mono text-sm uppercase tracking-[0.18em] text-muted-foreground">
+                    minimalist desktop interface
+                  </p>
+                </div>
+              </div>
 
-            {/* Progress Bar */}
-            <div className="w-48 h-px bg-border overflow-hidden">
-              <div className="h-full bg-foreground rounded-full animate-loading-bar" />
+              <div className="space-y-4 font-mono text-xs uppercase tracking-[0.18em] text-muted-foreground">
+                <div className="flex items-center justify-between">
+                  <span>Loading UI shell</span>
+                  <span>OK</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span>Mounting sections</span>
+                  <span>OK</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span>Starting assistant</span>
+                  <span>OK</span>
+                </div>
+              </div>
+
+              <div className="space-y-3">
+                <div className="h-1.5 overflow-hidden rounded-full bg-secondary/80">
+                  <div className="h-full rounded-full bg-foreground animate-loading-bar" />
+                </div>
+                <div className="flex justify-between font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+                  <span>status</span>
+                  <span>readying interface...</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>

@@ -1,5 +1,9 @@
 "use client";
 
+import Image from "next/image";
+import { motion } from "framer-motion";
+import { Reveal, RevealGroup, RevealItem } from "@/components/reveal";
+
 const technologies = [
   {
     name: "Next.js",
@@ -45,46 +49,61 @@ const technologies = [
 
 export function TechStack() {
   return (
-    <section className="py-8 sm:py-12">
-      <div className="max-w-5xl mx-auto">
-        <div className="space-y-6 sm:space-y-8">
-          <div className="text-center space-y-2">
-            <p className="text-sm sm:text-base text-muted-foreground">
-              Technologies I work with
+    <section className="border-t border-border/70 py-8 sm:py-9">
+      <div className="grid gap-6 lg:grid-cols-[140px_minmax(0,1fr)]">
+        <Reveal className="space-y-2">
+          <p className="font-mono text-[11px] uppercase tracking-[0.28em] text-muted-foreground">
+            {"//stack"}
+          </p>
+          <p className="max-w-[12rem] text-sm leading-6 text-muted-foreground">
+            Tools I use most for product, backend, and chain work.
+          </p>
+        </Reveal>
+
+        <div className="space-y-5">
+          <Reveal className="max-w-2xl">
+            <p className="text-sm leading-6 text-muted-foreground sm:text-[15px]">
+              Daily tools for shipping full-stack products, blockchain work, and
+              performance-minded interfaces.
             </p>
-          </div>
-          
-          <div className="grid grid-cols-4 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-4 sm:gap-6 md:gap-8">
-            {technologies.map((tech, index) => (
-              <div
-                key={index}
-                className="group relative flex flex-col items-center justify-center animate-fade-in"
-                style={{ animationDelay: `${index * 0.1}s` }}
-              >
-                <div className="flex items-center justify-center h-12 w-12 sm:h-14 sm:w-14 md:h-16 md:w-16 p-2 sm:p-2.5 md:p-3 rounded-xl transition-all duration-300 hover:scale-110 hover:shadow-lg">
-                  {/* Light mode icon */}
-                  <img
-                    src={tech.iconLight}
-                    alt={tech.name}
-                    className="w-full h-full object-contain opacity-100 hover:opacity-70 transition-opacity dark:hidden"
-                    loading="lazy"
-                  />
-                  {/* Dark mode icon */}
-                  <img
-                    src={tech.iconDark}
-                    alt={tech.name}
-                    className="w-full h-full object-contain opacity-100 hover:opacity-70 transition-opacity hidden dark:block"
-                    loading="lazy"
-                  />
-                </div>
-                <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-10">
-                  <div className="bg-foreground text-background text-xs font-medium px-3 py-1.5 rounded-lg whitespace-nowrap shadow-lg">
-                    {tech.name}
+          </Reveal>
+
+          <RevealGroup className="grid grid-cols-2 gap-3 sm:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-8">
+            {technologies.map((tech) => (
+              <RevealItem key={tech.name}>
+                <motion.div
+                  whileHover={{ y: -4, scale: 1.02 }}
+                  transition={{ duration: 0.2, ease: "easeOut" }}
+                  className="group flex flex-col items-center gap-3 rounded-[1.25rem] border border-border/70 bg-background/50 px-4 py-4 text-center shadow-[0_10px_30px_rgba(15,23,42,0.05)]"
+                >
+                  <div className="flex h-14 w-14 items-center justify-center rounded-[1rem] border border-border/60 bg-card/80 p-3.5">
+                    <div className="relative h-8 w-8">
+                      <Image
+                        src={tech.iconLight}
+                        alt={tech.name}
+                        width={32}
+                        height={32}
+                        className="h-full w-full object-contain dark:hidden"
+                      />
+                      <Image
+                        src={tech.iconDark}
+                        alt={tech.name}
+                        width={32}
+                        height={32}
+                        className="hidden h-full w-full object-contain dark:block"
+                      />
+                    </div>
                   </div>
-                </div>
-              </div>
+                  <div className="space-y-1">
+                    <span className="block text-sm font-medium text-foreground">
+                      {tech.name}
+                    </span>
+                  
+                  </div>
+                </motion.div>
+              </RevealItem>
             ))}
-          </div>
+          </RevealGroup>
         </div>
       </div>
     </section>

@@ -1,7 +1,8 @@
 "use client";
 
-import { ExternalLink, Github, ArrowUpRight } from "lucide-react";
-import { useState } from "react";
+import { motion } from "framer-motion";
+import { ArrowUpRight, Github } from "lucide-react";
+import { Reveal, RevealGroup, RevealItem } from "@/components/reveal";
 
 const projects = [
   {
@@ -67,7 +68,7 @@ const projects = [
     },
   },
   {
-    title: "Draw — Real-time Collaboration",
+    title: "Draw - Real-time Collaboration",
     description:
       "Real-time collaborative platform for creating and editing diagrams with multiple users.",
     tech: ["Next.js", "Express", "WebSockets", "Canvas API"],
@@ -79,140 +80,151 @@ const projects = [
 ];
 
 export function Projects() {
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const featuredProjects = projects.filter((project) => project.featured);
+  const otherProjects = projects.filter((project) => !project.featured);
 
   return (
-    <section id="projects" className="py-16">
-      <div className="max-w-4xl mx-auto space-y-8">
-        <div className="space-y-2">
-          <h2 className="text-2xl font-semibold">Projects</h2>
-          <p className="text-muted-foreground text-sm">Things I&apos;ve built</p>
-        </div>
+    <section id="projects" className="border-t border-border/70 py-8 sm:py-9">
+      <div className="grid gap-7 lg:grid-cols-[140px_minmax(0,1fr)]">
+        <Reveal className="space-y-2">
+          <p className="font-mono text-[11px] uppercase tracking-[0.28em] text-muted-foreground">
+            {"//projects"}
+          </p>
+          <p className="max-w-[13rem] text-sm leading-6 text-muted-foreground">
+            Selected builds across full-stack, web3, and systems work.
+          </p>
+        </Reveal>
 
-        {/* Featured projects — slightly elevated */}
-        <div className="space-y-3">
-          {projects.filter((p) => p.featured).map((project, index) => (
-            <div
-              key={index}
-              onMouseEnter={() => setHoveredIndex(index)}
-              onMouseLeave={() => setHoveredIndex(null)}
-              className={`group relative rounded-xl border border-border/50 bg-card/40 p-5 transition-all duration-300 ${
-                hoveredIndex === index
-                  ? "border-foreground/20 bg-card shadow-md"
-                  : "hover:border-border"
-              }`}
-            >
-              <div className="flex items-start justify-between gap-4">
-                <div className="flex-1 space-y-2 min-w-0">
-                  <div className="flex items-center gap-2">
-                    <h3 className="font-medium text-sm leading-none group-hover:text-primary transition-colors duration-200">
-                      {project.title}
-                    </h3>
-                    <span className="text-[10px] font-mono text-muted-foreground/60 border border-border/40 rounded px-1 py-0.5">
-                      {project.year}
-                    </span>
-                    {project.featured && (
-                      <span className="text-[10px] text-emerald-500/80 border border-emerald-500/20 bg-emerald-500/5 rounded px-1.5 py-0.5">
-                        featured
-                      </span>
-                    )}
+        <div className="space-y-7">
+          <RevealGroup className="grid gap-4 xl:grid-cols-2">
+            {featuredProjects.map((project) => (
+              <RevealItem key={project.title}>
+                <motion.article
+                  whileHover={{ y: -5 }}
+                  transition={{ duration: 0.2, ease: "easeOut" }}
+                  className="flex h-full flex-col rounded-[1.35rem] border border-border/70 bg-background/45 p-4 shadow-[0_18px_45px_rgba(15,23,42,0.06)] sm:p-[1.125rem]"
+                >
+                  <div className="mb-4 flex items-start justify-between gap-4">
+                    <div className="space-y-2.5">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <span className="inline-flex items-center rounded-full border border-border/70 bg-card/80 px-3 py-1 text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
+                          featured
+                        </span>
+                        <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
+                          {project.year}
+                        </span>
+                      </div>
+                      <h3 className="text-lg font-medium tracking-[-0.04em] text-foreground sm:text-[1.6rem]">
+                        {project.title}
+                      </h3>
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                      <a
+                        href={project.links.github}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label={`${project.title} GitHub repository`}
+                        className="flex h-9 w-9 items-center justify-center rounded-full border border-border/70 bg-card/75 text-muted-foreground transition-all duration-200 hover:border-foreground/15 hover:text-foreground"
+                      >
+                        <Github className="h-3.5 w-3.5" />
+                      </a>
+                      {project.links.demo && (
+                        <a
+                          href={project.links.demo}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          aria-label={`${project.title} live demo`}
+                          className="flex h-9 w-9 items-center justify-center rounded-full border border-border/70 bg-card/75 text-muted-foreground transition-all duration-200 hover:border-foreground/15 hover:text-foreground"
+                        >
+                          <ArrowUpRight className="h-3.5 w-3.5" />
+                        </a>
+                      )}
+                    </div>
                   </div>
-                  <p className="text-xs text-muted-foreground leading-relaxed group-hover:text-foreground/70 transition-colors duration-200">
+
+                  <p className="mb-4 max-w-xl text-sm leading-6 text-muted-foreground sm:text-[15px] sm:leading-6">
                     {project.description}
                   </p>
-                  <div className="flex flex-wrap gap-1.5">
-                    {project.tech.map((tech, i) => (
+
+                  <div className="mt-auto flex flex-wrap items-center gap-2">
+                    {project.tech.map((tech) => (
                       <span
-                        key={i}
-                        className="px-2 py-0.5 text-[11px] bg-secondary/30 text-muted-foreground rounded border border-border/30"
+                        key={tech}
+                        className="inline-flex items-center rounded-full border border-border/70 bg-card/70 px-3 py-1 text-[11px] uppercase tracking-[0.14em] text-muted-foreground"
                       >
                         {tech}
                       </span>
                     ))}
                   </div>
-                </div>
+                </motion.article>
+              </RevealItem>
+            ))}
+          </RevealGroup>
 
-                {/* Links */}
-                <div className="flex gap-2 text-muted-foreground shrink-0">
-                  {project.links.github && (
-                    <a
-                      href={project.links.github}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      aria-label="GitHub"
-                      className="p-1.5 rounded-lg hover:bg-secondary/50 hover:text-foreground transition-all duration-200"
-                    >
-                      <Github className="w-4 h-4" />
-                    </a>
-                  )}
-                  {project.links.demo && (
-                    <a
-                      href={project.links.demo}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      aria-label="Live demo"
-                      className="p-1.5 rounded-lg hover:bg-secondary/50 hover:text-foreground transition-all duration-200"
-                    >
-                      <ArrowUpRight className="w-4 h-4" />
-                    </a>
-                  )}
-                </div>
+          <Reveal className="rounded-[1.35rem] border border-border/70 bg-background/45 p-4 shadow-[0_18px_45px_rgba(15,23,42,0.06)] sm:p-[1.125rem]">
+            <div className="mb-4 flex items-center justify-between gap-4 border-b border-border/70 pb-4">
+              <div>
+                <h3 className="text-lg font-medium tracking-[-0.03em] text-foreground">
+                  More builds
+                </h3>
+                <p className="text-[13px] text-muted-foreground">
+                  Smaller experiments and supporting systems projects.
+                </p>
               </div>
+              <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
+                {otherProjects.length} entries
+              </span>
             </div>
-          ))}
-        </div>
 
-        {/* Divider */}
-        <div className="border-t border-border/30" />
-
-        {/* Other projects — table/list style */}
-        <div className="space-y-1">
-          {projects.filter((p) => !p.featured).map((project, index) => (
-            <div
-              key={index}
-              className="group flex items-center justify-between gap-4 py-3 px-2 rounded-lg hover:bg-secondary/20 transition-all duration-200 cursor-default"
-            >
-              <div className="flex items-center gap-3 min-w-0">
-                <span className="font-mono text-xs text-muted-foreground/50 w-8 shrink-0">
-                  {String(index + 1).padStart(2, "0")}
-                </span>
-                <div className="min-w-0">
-                  <span className="text-sm font-medium group-hover:text-primary transition-colors duration-200">
-                    {project.title}
-                  </span>
-                  <span className="hidden sm:inline text-muted-foreground/40 mx-2">—</span>
-                  <span className="hidden sm:inline text-xs text-muted-foreground">
-                    {project.description}
-                  </span>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-3 shrink-0">
-                <div className="hidden md:flex flex-wrap gap-1">
-                  {project.tech.slice(0, 2).map((tech, i) => (
-                    <span
-                      key={i}
-                      className="text-[10px] text-muted-foreground/60 border border-border/30 rounded px-1.5 py-0.5"
-                    >
-                      {tech}
-                    </span>
-                  ))}
-                </div>
-                <span className="font-mono text-xs text-muted-foreground/40">{project.year}</span>
-                {project.links.github && (
-                  <a
-                    href={project.links.github}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label="GitHub"
-                    className="text-muted-foreground hover:text-foreground transition-colors duration-200 opacity-0 group-hover:opacity-100"
+            <RevealGroup className="space-y-2">
+              {otherProjects.map((project, index) => (
+                <RevealItem key={project.title}>
+                  <motion.article
+                    whileHover={{ x: 4 }}
+                    transition={{ duration: 0.18, ease: "easeOut" }}
+                    className="grid gap-3 rounded-[1.1rem] border border-transparent px-3 py-3.5 transition-colors duration-200 hover:border-border/70 hover:bg-card/65 sm:grid-cols-[48px_minmax(0,1fr)_110px_auto]"
                   >
-                    <Github className="w-3.5 h-3.5" />
-                  </a>
-                )}
-              </div>
-            </div>
-          ))}
+                    <span className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
+                    <div className="space-y-1">
+                      <h4 className="text-[15px] font-medium text-foreground">
+                        {project.title}
+                      </h4>
+                      <p className="text-[13px] leading-6 text-muted-foreground">
+                        {project.description}
+                      </p>
+                    </div>
+                    <div className="flex flex-wrap items-center gap-2 sm:justify-end">
+                      {project.tech.slice(0, 2).map((tech) => (
+                        <span
+                          key={tech}
+                          className="inline-flex items-center rounded-full border border-border/70 bg-card/70 px-3 py-1 text-[10px] uppercase tracking-[0.12em] text-muted-foreground"
+                        >
+                          {tech}
+                        </span>
+                      ))}
+                    </div>
+                    <div className="flex items-center justify-between gap-4 sm:justify-end">
+                      <span className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
+                        {project.year}
+                      </span>
+                      <a
+                        href={project.links.github}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label={`${project.title} GitHub repository`}
+                        className="text-muted-foreground transition-colors duration-200 hover:text-foreground"
+                      >
+                        <Github className="h-3.5 w-3.5" />
+                      </a>
+                    </div>
+                  </motion.article>
+                </RevealItem>
+              ))}
+            </RevealGroup>
+          </Reveal>
         </div>
       </div>
     </section>

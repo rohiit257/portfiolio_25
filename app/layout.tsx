@@ -1,11 +1,20 @@
 import './globals.css';
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
+import { IBM_Plex_Mono, Space_Grotesk } from 'next/font/google';
 import { ThemeProvider } from '@/components/theme-provider';
 import { LoadingScreen } from '@/components/loading-screen';
 import { Toaster } from 'sonner';
 
-const inter = Inter({ subsets: ['latin'] });
+const sans = Space_Grotesk({
+  subsets: ['latin'],
+  variable: '--font-sans',
+});
+
+const mono = IBM_Plex_Mono({
+  subsets: ['latin'],
+  weight: ['400', '500', '600'],
+  variable: '--font-mono',
+});
 
 export const metadata: Metadata = {
   title: {
@@ -88,8 +97,8 @@ export const metadata: Metadata = {
   referrer: 'origin-when-cross-origin',
   colorScheme: 'dark light',
   themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#ffffff' },
-    { media: '(prefers-color-scheme: dark)', color: '#000000' },
+    { media: '(prefers-color-scheme: light)', color: '#ece7e1' },
+    { media: '(prefers-color-scheme: dark)', color: '#111111' },
   ],
   viewport: {
     width: 'device-width',
@@ -139,7 +148,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={inter.className}>
+      <body className={`${sans.variable} ${mono.variable} font-sans`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"
@@ -147,12 +156,10 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <LoadingScreen>
-            {/* Animated background layer */}
             <div className="bg-animated" />
-            {/* Content */}
             <div className="relative">
               {children}
-              <Toaster/>
+              <Toaster />
             </div>
           </LoadingScreen>
         </ThemeProvider>

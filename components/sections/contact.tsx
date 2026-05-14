@@ -1,7 +1,9 @@
 "use client";
 
 import React, { useState } from "react";
+import { motion } from "framer-motion";
 import { Send, X } from "lucide-react";
+import { Reveal } from "@/components/reveal";
 
 export function Contact() {
   const [formData, setFormData] = useState({
@@ -13,20 +15,15 @@ export function Contact() {
   const [dialogMessage, setDialogMessage] = useState({
     title: "Message Sent!",
     description: "Thanks for reaching out! I'll get back to you as soon as possible.",
-    isError: false
+    isError: false,
   });
   const [status, setStatus] = useState<"idle" | "sending" | "sent">("idle");
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log("=== Form submission started ===");
+  const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
     setStatus("sending");
-    
+
     try {
-      console.log("Form data to send:", formData);
-      console.log("Calling n8n webhook directly...");
-      
-      // Call n8n webhook directly
       const response = await fetch("https://n8n-lhkb.onrender.com/webhook/contact-form", {
         method: "POST",
         headers: {
@@ -37,189 +34,226 @@ export function Contact() {
           email: formData.email,
           message: formData.message,
           timestamp: new Date().toISOString(),
-          source: "portfolio-contact-form"
+          source: "portfolio-contact-form",
         }),
       });
 
-      console.log("Response received!");
-      console.log("Response status:", response.status);
-      console.log("Response ok:", response.ok);
-
       if (!response.ok) {
         const errorText = await response.text();
-        console.error("Error response body:", errorText);
-        throw new Error(`Failed to send message: ${response.status}`);
+        throw new Error(`Failed to send message: ${response.status} ${errorText}`);
       }
-      
-      let responseData;
+
       try {
-        responseData = await response.json();
-        console.log("Success response data:", responseData);
-      } catch (e) {
-        console.log("Webhook returned non-JSON response (OK)");
+        await response.json();
+      } catch {
+        // Webhook can return a non-JSON success body.
       }
-      console.log("=== Form submission successful ===");
-      
+
       setStatus("sent");
       setDialogMessage({
         title: "Message Sent!",
         description: "Thanks for reaching out! I'll get back to you as soon as possible.",
-        isError: false
+        isError: false,
       });
       setShowDialog(true);
-      
-      setTimeout(() => {
+
+      window.setTimeout(() => {
         setShowDialog(false);
         setStatus("idle");
         setFormData({ name: "", email: "", message: "" });
       }, 3000);
     } catch (error) {
-      console.error("=== Form submission FAILED ===");
-      console.error("Error type:", error instanceof Error ? error.constructor.name : typeof error);
-      console.error("Error message:", error instanceof Error ? error.message : String(error));
-      console.error("Full error object:", error);
-      
       setStatus("idle");
       setDialogMessage({
         title: "Error Sending Message",
-        description: error instanceof Error ? error.message : "Something went wrong. Please try again later or contact me directly.",
-        isError: true
+        description:
+          error instanceof Error
+            ? error.message
+            : "Something went wrong. Please try again later or contact me directly.",
+        isError: true,
       });
       setShowDialog(true);
-      
-      setTimeout(() => {
+
+      window.setTimeout(() => {
         setShowDialog(false);
       }, 3000);
     }
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setFormData(prev => ({
-      ...prev,
-      [e.target.name]: e.target.value
+  const handleChange = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    setFormData((current) => ({
+      ...current,
+      [event.target.name]: event.target.value,
     }));
   };
 
   return (
-    <section className="py-16 sm:py-20" id="contact">
-      <div className="max-w-2xl mx-auto space-y-6 sm:space-y-8">
-        <div className="space-y-2 text-center">
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight">Get in Touch</h2>
-          <p className="text-sm sm:text-base text-muted-foreground">
-            Have a project in mind? Let's talk about it.
+    <section className="border-t border-border/70 py-8 sm:py-9" id="contact">
+      <div className="grid gap-7 lg:grid-cols-[140px_minmax(0,1fr)]">
+        <Reveal className="space-y-2">
+          <p className="font-mono text-[11px] uppercase tracking-[0.28em] text-muted-foreground">
+            {"//contact"}
           </p>
-        </div>
+          <p className="max-w-[13rem] text-sm leading-6 text-muted-foreground">
+            For deeper project conversations, use the full form here.
+          </p>
+        </Reveal>
 
-        {/* Contact Form */}
-        <div className="bg-card border border-border rounded-2xl p-4 sm:p-6 md:p-8 animate-scale-in">
-          <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5">
-            <div>
-              <label htmlFor="name" className="block text-sm font-medium mb-2">
-                Name
-              </label>
-              <input
-                type="text"
-                id="name"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                required
-                className="w-full px-3 sm:px-4 py-2 sm:py-2.5 text-sm sm:text-base rounded-lg border border-border/40 bg-secondary/30 focus:bg-secondary/50 focus:border-foreground/50 focus:outline-none transition-all duration-300"
-                placeholder="Your name"
-              />
+        <Reveal>
+          <motion.div
+            whileHover={{ y: -4 }}
+            transition={{ duration: 0.2, ease: "easeOut" }}
+            className="rounded-[1.35rem] border border-border/70 bg-background/45 p-4 shadow-[0_18px_45px_rgba(15,23,42,0.06)] sm:p-5 lg:p-6"
+          >
+            <div className="mb-6 flex flex-col gap-4 border-b border-border/70 pb-5 sm:flex-row sm:items-end sm:justify-between">
+              <div className="space-y-2">
+                <h2 className="text-xl font-medium tracking-[-0.05em] text-foreground sm:text-[1.7rem]">
+                  Get in touch
+                </h2>
+                <p className="max-w-2xl text-sm leading-6 text-muted-foreground sm:text-[15px] sm:leading-7">
+                  Have a project in mind? Tell me what you are building and I
+                  will get back to you.
+                </p>
+              </div>
+              <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
+                response workflow active
+              </span>
             </div>
 
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium mb-2">
-                Email
+            <form onSubmit={handleSubmit} className="grid gap-4 lg:grid-cols-2">
+              <label className="space-y-2">
+                <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground">
+                  name
+                </span>
+                <input
+                  type="text"
+                  id="name"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  required
+                  className="w-full rounded-[1rem] border border-border/70 bg-card/75 px-4 py-3 text-sm text-foreground outline-none transition-colors duration-200 placeholder:text-muted-foreground focus:border-foreground/15"
+                  placeholder="Your name"
+                />
               </label>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                required
-                className="w-full px-3 sm:px-4 py-2 sm:py-2.5 text-sm sm:text-base rounded-lg border border-border/40 bg-secondary/30 focus:bg-secondary/50 focus:border-foreground/50 focus:outline-none transition-all duration-300"
-                placeholder="your@email.com"
-              />
-            </div>
 
-            <div>
-              <label htmlFor="message" className="block text-sm font-medium mb-2">
-                Message
+              <label className="space-y-2">
+                <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground">
+                  email
+                </span>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  required
+                  className="w-full rounded-[1rem] border border-border/70 bg-card/75 px-4 py-3 text-sm text-foreground outline-none transition-colors duration-200 placeholder:text-muted-foreground focus:border-foreground/15"
+                  placeholder="your@email.com"
+                />
               </label>
-              <textarea
-                id="message"
-                name="message"
-                value={formData.message}
-                onChange={handleChange}
-                required
-                rows={5}
-                className="w-full px-3 sm:px-4 py-2 sm:py-2.5 text-sm sm:text-base rounded-lg border border-border/40 bg-secondary/30 focus:bg-secondary/50 focus:border-foreground/50 focus:outline-none transition-all duration-300 resize-none"
-                placeholder="Tell me about your project..."
-              />
-            </div>
 
-            <button
-              type="submit"
-              disabled={status !== "idle"}
-              className="w-full flex items-center justify-center gap-2 px-6 py-3 sm:py-3.5 text-sm sm:text-base bg-primary text-primary-foreground rounded-lg font-medium transition-all duration-300 hover:scale-[1.02] hover:shadow-lg hover:shadow-primary/50 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
-            >
-              {status === "idle" && (
-                <>
-                  <Send className="h-4 w-4" />
-                  Send Message
-                </>
-              )}
-              {status === "sending" && (
-                <>
-                  <div className="h-4 w-4 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin" />
-                  Sending...
-                </>
-              )}
-              {status === "sent" && (
-                <>
-                  <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
-                  Sent!
-                </>
-              )}
-            </button>
-          </form>
-        </div>
+              <label className="space-y-2 lg:col-span-2">
+                <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground">
+                  message
+                </span>
+                <textarea
+                  id="message"
+                  name="message"
+                  value={formData.message}
+                  onChange={handleChange}
+                  required
+                  rows={6}
+                  className="w-full resize-none rounded-[1rem] border border-border/70 bg-card/75 px-4 py-3 text-sm text-foreground outline-none transition-colors duration-200 placeholder:text-muted-foreground focus:border-foreground/15"
+                  placeholder="Tell me about the product, timeline, or problem you want to solve..."
+                />
+              </label>
+
+              <div className="lg:col-span-2">
+                <button
+                  type="submit"
+                  disabled={status !== "idle"}
+                  className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-foreground bg-foreground px-6 py-3 text-sm font-medium text-background transition-transform duration-200 hover:scale-[1.01] disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:scale-100 sm:w-auto sm:min-w-[180px]"
+                >
+                  {status === "idle" && (
+                    <>
+                      <Send className="h-4 w-4" />
+                      Send message
+                    </>
+                  )}
+                  {status === "sending" && (
+                    <>
+                      <span className="h-4 w-4 animate-spin rounded-full border-2 border-background/30 border-t-background" />
+                      Sending...
+                    </>
+                  )}
+                  {status === "sent" && (
+                    <>
+                      <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M5 13l4 4L19 7"
+                        />
+                      </svg>
+                      Sent
+                    </>
+                  )}
+                </button>
+              </div>
+            </form>
+          </motion.div>
+        </Reveal>
       </div>
 
-      {/* Success/Error Dialog */}
       {showDialog && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-sm animate-fade-in">
-          <div className="bg-card border border-border rounded-2xl p-6 sm:p-8 max-w-sm w-full shadow-2xl animate-scale-in">
-            <div className="flex justify-between items-start mb-4">
-              <div className={`h-12 w-12 rounded-full flex items-center justify-center ${
-                dialogMessage.isError ? "bg-red-500/20" : "bg-green-500/20"
-              }`}>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/75 p-4 backdrop-blur-sm">
+          <div className="w-full max-w-sm rounded-[1.5rem] border border-border/70 bg-card/95 p-5 shadow-[0_24px_70px_rgba(15,23,42,0.18)]">
+            <div className="mb-4 flex items-start justify-between gap-4">
+              <div
+                className={`flex h-11 w-11 items-center justify-center rounded-full ${
+                  dialogMessage.isError ? "bg-red-500/12" : "bg-emerald-500/12"
+                }`}
+              >
                 {dialogMessage.isError ? (
-                  <svg className="h-6 w-6 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  <svg className="h-5 w-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M6 18L18 6M6 6l12 12"
+                    />
                   </svg>
                 ) : (
-                  <svg className="h-6 w-6 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  <svg className="h-5 w-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M5 13l4 4L19 7"
+                    />
                   </svg>
                 )}
               </div>
               <button
                 onClick={() => setShowDialog(false)}
-                className="text-muted-foreground hover:text-foreground transition-colors"
+                className="text-muted-foreground transition-colors duration-200 hover:text-foreground"
               >
                 <X className="h-5 w-5" />
               </button>
             </div>
-            <h3 className="text-xl font-bold mb-2">{dialogMessage.title}</h3>
-            <p className="text-muted-foreground text-sm">
-              {dialogMessage.description}
-            </p>
+
+            <div className="space-y-2">
+              <h3 className="text-lg font-medium tracking-[-0.03em] text-foreground">
+                {dialogMessage.title}
+              </h3>
+              <p className="text-sm leading-6 text-muted-foreground">
+                {dialogMessage.description}
+              </p>
+            </div>
           </div>
         </div>
       )}

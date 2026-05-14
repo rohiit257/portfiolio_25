@@ -1,14 +1,16 @@
 "use client";
 
+import { motion } from "framer-motion";
 import { ExternalLink } from "lucide-react";
+import { Reveal, RevealGroup, RevealItem } from "@/components/reveal";
 
 const experiences = [
   {
     title: "Software Engineer",
     company: "PirateCrewFun",
     companyUrl: "https://piratecrewfun.com",
-    period: "2024 — Present",
-    type: "Full-time · Remote",
+    period: "2024 - Present",
+    type: "Full-time / Remote",
     description:
       "Building full-stack web applications with Next.js and TypeScript. Integrating Solana smart contracts and Meteora DeFi protocols. Shipped features improving performance and UX across DeFi products.",
     tags: ["Next.js", "TypeScript", "Solana", "DeFi"],
@@ -17,8 +19,8 @@ const experiences = [
     title: "Cohort Participant",
     company: "Solana Turbine",
     companyUrl: "https://turbine.so",
-    period: "2023 — 2024",
-    type: "Program · Online",
+    period: "2023 - 2024",
+    type: "Program / Online",
     description:
       "Completed builders and advanced SVM cohorts. Deep dive into Solana blockchain architecture, building and deploying multiple on-chain programs.",
     tags: ["Rust", "Solana", "Anchor", "Web3"],
@@ -27,70 +29,75 @@ const experiences = [
 
 export function Experience() {
   return (
-    <section id="experience" className="py-16">
-      <div className="max-w-4xl mx-auto space-y-8">
-        <div className="space-y-2">
-          <h2 className="text-2xl font-semibold">Experience</h2>
-          <p className="text-muted-foreground text-sm">Where I&apos;ve worked and learned</p>
-        </div>
+    <section id="experience" className="border-t border-border/70 py-7 sm:py-9">
+      <div className="grid gap-6 lg:grid-cols-[140px_minmax(0,1fr)]">
+        <Reveal className="space-y-2">
+          <p className="font-mono text-[11px] uppercase tracking-[0.28em] text-muted-foreground">
+            {"//experience"}
+          </p>
+          <p className="max-w-[12rem] text-sm leading-6 text-muted-foreground">
+            Where I have worked, learned, and shipped.
+          </p>
+        </Reveal>
 
-        <div className="relative">
-          {/* Vertical timeline line */}
-          <div className="absolute left-0 top-2 bottom-2 w-px bg-border/60" />
-
-          <div className="space-y-10 pl-8">
-            {experiences.map((exp, index) => (
-              <div key={index} className="relative group">
-                {/* Timeline dot */}
-                <div className="absolute -left-8 top-1.5 w-2 h-2 rounded-full border-2 border-foreground/40 bg-background group-hover:border-foreground group-hover:bg-foreground transition-all duration-300" />
-
-                <div className="space-y-2">
-                  {/* Header row */}
-                  <div className="flex items-start justify-between gap-4">
-                    <div>
-                      <h3 className="font-medium text-foreground group-hover:text-primary transition-colors duration-200">
-                        {exp.title}
+        <RevealGroup className="grid gap-3">
+          {experiences.map((experience) => (
+            <RevealItem key={`${experience.company}-${experience.period}`}>
+              <motion.article
+                whileHover={{ y: -3 }}
+                transition={{ duration: 0.2, ease: "easeOut" }}
+                className="rounded-[1.15rem] border border-border/70 bg-background/45 p-4 shadow-[0_14px_34px_rgba(15,23,42,0.05)] sm:p-5"
+              >
+                <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+                  <div className="min-w-0 space-y-2">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <h3 className="text-base font-medium text-foreground sm:text-lg">
+                        {experience.company}
                       </h3>
-                      <div className="flex items-center gap-1.5 mt-0.5">
-                        <a
-                          href={exp.companyUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-sm text-muted-foreground hover:text-primary transition-colors duration-200 flex items-center gap-1"
-                        >
-                          {exp.company}
-                          <ExternalLink className="w-3 h-3 opacity-60" />
-                        </a>
-                        <span className="text-muted-foreground/40 text-xs">·</span>
-                        <span className="text-xs text-muted-foreground/70">{exp.type}</span>
-                      </div>
+                      <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
+                        {`//${experience.title}`}
+                      </span>
                     </div>
-                    <span className="text-xs text-muted-foreground shrink-0 pt-0.5 font-mono">
-                      {exp.period}
+
+                    <a
+                      href={experience.companyUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 text-[13px] text-muted-foreground transition-colors duration-200 hover:text-foreground"
+                    >
+                      Visit company
+                      <ExternalLink className="h-3 w-3" />
+                    </a>
+                  </div>
+
+                  <div className="flex shrink-0 flex-wrap gap-2 md:max-w-[15rem] md:justify-end">
+                    <span className="rounded-full border border-border/70 bg-card/80 px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
+                      {experience.period}
+                    </span>
+                    <span className="rounded-full border border-border/60 bg-background/65 px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground/85">
+                      {experience.type}
                     </span>
                   </div>
-
-                  {/* Description */}
-                  <p className="text-sm text-muted-foreground leading-relaxed group-hover:text-foreground/80 transition-colors duration-200">
-                    {exp.description}
-                  </p>
-
-                  {/* Tags */}
-                  <div className="flex flex-wrap gap-1.5 pt-1">
-                    {exp.tags.map((tag, i) => (
-                      <span
-                        key={i}
-                        className="px-2 py-0.5 text-xs bg-secondary/40 text-muted-foreground rounded border border-border/40 group-hover:bg-secondary/60 transition-colors duration-200"
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
-        </div>
+
+                <p className="mt-4 max-w-3xl text-sm leading-6 text-muted-foreground sm:text-[15px] sm:leading-7">
+                  {experience.description}
+                </p>
+
+                <div className="mt-4 flex flex-wrap gap-2">
+                  {experience.tags.map((tag) => (
+                    <span
+                      key={tag}
+                      className="rounded-full border border-border/70 bg-card/70 px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              </motion.article>
+            </RevealItem>
+          ))}
+        </RevealGroup>
       </div>
     </section>
   );
