@@ -24,6 +24,8 @@
     --input: 220 8% 79%;
     --ring: 220 8% 10%;
     --radius: 1.25rem;
+    --font-sans: "Space Grotesk", "Avenir Next", "Segoe UI", sans-serif;
+    --font-mono: "IBM Plex Mono", "SFMono-Regular", "Cascadia Code", Consolas, monospace;
   }
 
   .dark {
