@@ -7,13 +7,14 @@ import { FloatingDock } from "@/components/floating-dock";
 import { Header } from "@/components/header";
 import { Experience } from "@/components/sections/experience";
 import { Contact } from "@/components/sections/contact";
+import { Chatbot } from "@/components/chatbot";
 
 export default function Home() {
   return (
     <main className="min-h-screen pb-24">
       <Header />
       <FloatingDock />
-
+      <Chatbot />
       <div className="max-w-6xl mx-auto px-6 md:px-8 lg:px-12">
         <Introduction />
         <TechStack />

@@ -1,0 +1,141 @@
+=== ROHIT SHAHI — PORTFOLIO KNOWLEDGE BASE ===
+
+--- PERSONAL INFORMATION ---
+Name: Rohit Shahi
+Alias: rohitdebugbugs
+Age: 21 years old
+Location: India
+Education: Final year Computer Engineering student
+Email: rohitshahi581@gmail.com
+LinkedIn: https://www.linkedin.com/in/rohit-shahi-152661253/
+GitHub: https://github.com/rohiit257
+LeetCode: https://leetcode.com/azzyXT
+Portfolio: https://rohitdebugbugs-portfolio.vercel.app
+
+--- ABOUT ME ---
+Rohit Shahi is a 21-year-old full-stack developer and blockchain engineer based in India, currently in his final year of Computer Engineering. He works across full-stack development, Solana blockchain, and Agentic AI Workflows. He is part of the School of Solana program. In his free time, he enjoys gaming, music, programming, and thinking deeply about technology.
+
+--- WORK EXPERIENCE ---
+
+1. Software Engineer at PirateCrewFun (2024 — Present)
+   Type: Full-time, Remote
+   Company URL: https://piratecrewfun.com
+   Description: Building full-stack web applications with Next.js and TypeScript. Integrating Solana smart contracts and Meteora DeFi protocols. Shipped features improving performance and UX across DeFi products. Collaborated with cross-functional teams on blockchain products.
+   Skills Used: Next.js, TypeScript, Solana, DeFi, Meteora Protocol
+
+2. Cohort Participant at Solana Turbine (2023 — 2024)
+   Type: Program, Online
+   Company URL: https://turbine.so
+   Description: Completed builders and advanced SVM (Solana Virtual Machine) cohorts. Deep dive into Solana blockchain architecture. Built and deployed multiple on-chain programs. Gained expertise in Rust and the Anchor framework.
+   Skills Used: Rust, Solana, Anchor, Web3
+
+--- PROJECTS ---
+
+1. Versus Dilemma Platform (2025)
+   Description: A full-stack real-time scalable platform where users post their dilemmas and other users vote on them. Features real-time voting with WebSockets, scalable backend with Redis and Docker.
+   Tech Stack: Next.js, Express.js, Neon (PostgreSQL), Prisma, Zod, Redis, WebSockets, Docker
+   GitHub: https://github.com/rohiit257/versus
+   Live Demo: https://versus-chat.vercel.app
+   Status: Featured project
+
+2. MetaBazar (2024)
+   Description: A fully decentralised NFT marketplace built on the Ethereum blockchain. Users can mint, buy, sell, and trade NFTs with smart contract security.
+   Tech Stack: Next.js, Solidity, Ethereum
+   GitHub: https://github.com/rohiit257/metabazar
+   Live Demo: https://metabazaar.vercel.app
+   Status: Featured project
+
+3. LandLedger (2024)
+   Description: A decentralised land registry system built on the Ethereum blockchain, ensuring tamper-proof property ownership records using smart contracts.
+   Tech Stack: Next.js, Solidity, Ethereum
+   GitHub: https://github.com/rohiit257/Landstate
+
+4. HTTP Server in C (2024)
+   Description: A custom HTTP/1.1 server implementation built entirely from scratch using the C programming language, using raw socket programming.
+   Tech Stack: C, Socket Programming, HTTP Protocol
+   GitHub: https://github.com/rohiit257/http-server-c
+
+5. RAG Chatbot (2024)
+   Description: A Retrieval-Augmented Generation chatbot that consumes PDF documents and provides intelligent, context-aware responses using LangChain and ChromaDB.
+   Tech Stack: Python, ChromaDB, LangChain, OpenAI
+   GitHub: https://github.com/rohiit257/rag-chatbot
+
+6. AMA App (2024)
+   Description: An Ask Me Anything platform with user authentication using NextAuth, real-time question management, and a clean UI.
+   Tech Stack: Next.js, MongoDB, NextAuth, Tailwind CSS
+   GitHub: https://github.com/rohiit257/ama-app
+
+7. Draw — Real-time Collaboration (2024)
+   Description: A real-time collaborative whiteboard and diagram editing platform that supports multiple simultaneous users using WebSockets and Canvas API.
+   Tech Stack: Next.js, Express.js, WebSockets, Canvas API
+   GitHub: https://github.com/rohiit257/draw-collaboration
+
+--- TECHNICAL SKILLS ---
+
+Blockchain & Web3:
+- Solana (Level: 90%) — Smart contracts, DeFi protocols, on-chain programs
+- Rust (Level: 85%) — Systems programming, blockchain development
+- Anchor Framework (Level: 88%) — Solana framework for building programs
+- Ethereum & Solidity — Smart contract development, NFT marketplaces
+- DeFi Protocols — Meteora, Jupiter, Raydium integrations
+
+Frontend:
+- Next.js (Level: 92%) — Full-stack React framework, SSR, SSG
+- React (Level: 95%) — UI component architecture, state management
+- TypeScript (Level: 90%) — Type-safe application development
+- Tailwind CSS — Utility-first CSS styling
+
+Backend:
+- Node.js (Level: 87%) — REST APIs, real-time servers
+- Express.js — Backend web framework
+- PostgreSQL (Level: 82%) — Relational database design, query optimization
+- Prisma — ORM for database management
+- Redis — Caching and pub/sub messaging
+- WebSockets — Real-time bidirectional communication
+- Docker — Containerization and deployment
+
+AI & ML:
+- LangChain — Building AI pipelines and RAG systems
+- ChromaDB — Vector database for embeddings
+- Python — AI/ML scripting and automation
+- OpenAI API integration
+
+Systems:
+- C — Systems programming, OS-level development
+- Socket Programming — Low-level network communication
+
+--- SKILLS SUMMARY ---
+Rohit specializes in: Full-Stack Web Development, Solana Blockchain Engineering, DeFi Protocol Integration, Real-time Applications, Smart Contract Development, AI/ML Integrations, and Systems Programming.
+
+--- CONTACT ---
+To hire or collaborate with Rohit, reach out via:
+- Email: rohitshahi581@gmail.com
+- LinkedIn: https://www.linkedin.com/in/rohit-shahi-152661253/
+- GitHub: https://github.com/rohiit257
+- Portfolio contact form available on the website
+
+--- AVAILABILITY ---
+Rohit is open to: Full-time roles, freelance projects, open-source collaborations, blockchain consulting, and AI/Web3 project discussions.
+
+--- FREQUENTLY ASKED QUESTIONS ---
+
+Q: What is Rohit's main expertise?
+A: Rohit's main expertise is in Full-Stack Web Development (Next.js, React, TypeScript) and Solana Blockchain Engineering (Rust, Anchor, DeFi protocols). He also has strong experience in AI/ML integrations and real-time systems.
+
+Q: Is Rohit available for hire?
+A: Yes, Rohit is open to full-time roles, freelance projects, blockchain consulting, and collaborations. Contact him at rohitshahi581@gmail.com.
+
+Q: What blockchain platforms does Rohit work with?
+A: Rohit primarily works with Solana and Ethereum. He has built NFT marketplaces, DeFi trading tools, and land registry systems on these blockchains.
+
+Q: What programming languages does Rohit know?
+A: Rohit is proficient in TypeScript/JavaScript, Rust, Python, C, and Solidity.
+
+Q: Where is Rohit currently working?
+A: Rohit is currently working as a Software Engineer at PirateCrewFun (remote), building full-stack DeFi applications with Solana integrations.
+
+Q: What is Rohit studying?
+A: Rohit is in his final year of Computer Engineering. He is also part of the School of Solana program.
+
+Q: What is Rohit's most impressive project?
+A: The Versus Dilemma Platform (2025) is his most recent and technically complex project, featuring real-time WebSocket voting, Redis caching, Docker deployment, and a full Prisma + Neon database stack.
