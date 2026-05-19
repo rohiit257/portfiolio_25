@@ -3,83 +3,13 @@
 import { motion } from "framer-motion";
 import { ArrowUpRight, Github } from "lucide-react";
 import { Reveal, RevealGroup, RevealItem } from "@/components/reveal";
+import type { PublicProject } from "@/lib/portfolio-public";
 
-const projects = [
-  {
-    title: "Versus Dilemma Platform",
-    description:
-      "Full stack realtime scalable platform to clear your dilemmas while other users vote on that.",
-    tech: ["Next.js", "Express", "Neon", "Prisma", "Zod", "Redis", "WebSockets", "Docker"],
-    year: "2025",
-    featured: true,
-    links: {
-      github: "https://github.com/rohiit257/versus",
-      demo: "https://versus-chat.vercel.app",
-    },
-  },
-  {
-    title: "MetaBazar",
-    description: "Decentralised NFT marketplace built on Ethereum blockchain.",
-    tech: ["Next.js", "Solidity", "Ethereum"],
-    year: "2024",
-    featured: true,
-    links: {
-      github: "https://github.com/rohiit257/metabazar",
-      demo: "https://metabazaar.vercel.app",
-    },
-  },
-  {
-    title: "LandLedger",
-    description: "Land registry system decentralised on Ethereum blockchain.",
-    tech: ["Next.js", "Solidity", "Ethereum"],
-    year: "2024",
-    links: {
-      github: "https://github.com/rohiit257/Landstate",
-    },
-  },
-  {
-    title: "HTTP Server",
-    description:
-      "Custom HTTP server implementation built from scratch using C programming language.",
-    tech: ["C", "Socket Programming", "HTTP Protocol"],
-    year: "2024",
-    links: {
-      github: "https://github.com/rohiit257/http-server-c",
-    },
-  },
-  {
-    title: "RAG Chatbot",
-    description:
-      "Retrieval-Augmented Generation chatbot that consumes PDFs and provides intelligent responses.",
-    tech: ["Python", "ChromaDB", "LangChain", "OpenAI"],
-    year: "2024",
-    links: {
-      github: "https://github.com/rohiit257/rag-chatbot",
-    },
-  },
-  {
-    title: "AMA App",
-    description:
-      "Ask Me Anything platform with user authentication and real-time question management.",
-    tech: ["Next.js", "MongoDB", "NextAuth", "Tailwind CSS"],
-    year: "2024",
-    links: {
-      github: "https://github.com/rohiit257/ama-app",
-    },
-  },
-  {
-    title: "Draw - Real-time Collaboration",
-    description:
-      "Real-time collaborative platform for creating and editing diagrams with multiple users.",
-    tech: ["Next.js", "Express", "WebSockets", "Canvas API"],
-    year: "2024",
-    links: {
-      github: "https://github.com/rohiit257/draw-collaboration",
-    },
-  },
-];
+type Props = {
+  projects: PublicProject[];
+};
 
-export function Projects() {
+export function Projects({ projects }: Props) {
   const featuredProjects = projects.filter((project) => project.featured);
   const otherProjects = projects.filter((project) => !project.featured);
 

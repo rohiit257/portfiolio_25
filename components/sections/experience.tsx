@@ -3,31 +3,13 @@
 import { motion } from "framer-motion";
 import { ExternalLink } from "lucide-react";
 import { Reveal, RevealGroup, RevealItem } from "@/components/reveal";
+import type { PublicExperience } from "@/lib/portfolio-public";
 
-const experiences = [
-  {
-    title: "Software Engineer",
-    company: "PirateCrewFun",
-    companyUrl: "https://piratecrewfun.com",
-    period: "2024 - Present",
-    type: "Full-time / Remote",
-    description:
-      "Building full-stack web applications with Next.js and TypeScript. Integrating Solana smart contracts and Meteora DeFi protocols. Shipped features improving performance and UX across DeFi products.",
-    tags: ["Next.js", "TypeScript", "Solana", "DeFi"],
-  },
-  {
-    title: "Cohort Participant",
-    company: "Solana Turbine",
-    companyUrl: "https://turbine.so",
-    period: "2023 - 2024",
-    type: "Program / Online",
-    description:
-      "Completed builders and advanced SVM cohorts. Deep dive into Solana blockchain architecture, building and deploying multiple on-chain programs.",
-    tags: ["Rust", "Solana", "Anchor", "Web3"],
-  },
-];
+type Props = {
+  experiences: PublicExperience[];
+};
 
-export function Experience() {
+export function Experience({ experiences }: Props) {
   return (
     <section id="experience" className="border-t border-border/70 py-7 sm:py-9">
       <div className="grid gap-6 lg:grid-cols-[140px_minmax(0,1fr)]">

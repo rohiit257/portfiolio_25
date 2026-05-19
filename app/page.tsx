@@ -7,8 +7,10 @@ import { Introduction } from "@/components/sections/introduction";
 import { Projects } from "@/components/sections/projects";
 import { SocialGrid } from "@/components/sections/social-grid";
 import { TechStack } from "@/components/sections/tech-stack";
+import { getPublicPortfolioData } from "@/lib/portfolio-public";
 
-export default function Home() {
+export default async function Home() {
+  const { techStack, experiences, projects } = await getPublicPortfolioData();
   return (
     <main className="relative min-h-screen overflow-hidden pb-16 sm:pb-[4.5rem]">
       <Header />
@@ -79,9 +81,9 @@ export default function Home() {
 
           <div className="px-3 py-5 sm:px-5 sm:py-6 lg:px-6 lg:py-7">
             <Introduction />
-            <TechStack />
-            <Experience />
-            <Projects />
+            <TechStack technologies={techStack} />
+            <Experience experiences={experiences} />
+            <Projects projects={projects} />
             <SocialGrid />
             <Contact />
           </div>

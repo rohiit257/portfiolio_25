@@ -3,51 +3,13 @@
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { Reveal, RevealGroup, RevealItem } from "@/components/reveal";
+import type { PublicTech } from "@/lib/portfolio-public";
 
-const technologies = [
-  {
-    name: "Next.js",
-    iconLight: "https://cdn.simpleicons.org/nextdotjs/000000",
-    iconDark: "https://cdn.simpleicons.org/nextdotjs/ffffff",
-  },
-  {
-    name: "Express.js",
-    iconLight: "https://cdn.simpleicons.org/express/000000",
-    iconDark: "https://cdn.simpleicons.org/express/ffffff",
-  },
-  {
-    name: "TypeScript",
-    iconLight: "https://cdn.simpleicons.org/typescript/3178C6",
-    iconDark: "https://cdn.simpleicons.org/typescript/3178C6",
-  },
-  {
-    name: "C++",
-    iconLight: "https://cdn.simpleicons.org/cplusplus/00599C",
-    iconDark: "https://cdn.simpleicons.org/cplusplus/00599C",
-  },
-  {
-    name: "Rust",
-    iconLight: "https://cdn.simpleicons.org/rust/CE422B",
-    iconDark: "https://cdn.simpleicons.org/rust/CE422B",
-  },
-  {
-    name: "Solana",
-    iconLight: "https://cdn.simpleicons.org/solana/14F195",
-    iconDark: "https://cdn.simpleicons.org/solana/14F195",
-  },
-  {
-    name: "Ethereum",
-    iconLight: "https://cdn.simpleicons.org/ethereum/3C3C3D",
-    iconDark: "https://cdn.simpleicons.org/ethereum/ffffff",
-  },
-  {
-    name: "Solidity",
-    iconLight: "https://cdn.simpleicons.org/solidity/363636",
-    iconDark: "https://cdn.simpleicons.org/solidity/ffffff",
-  },
-];
+type Props = {
+  technologies: PublicTech[];
+};
 
-export function TechStack() {
+export function TechStack({ technologies }: Props) {
   return (
     <section className="border-t border-border/70 py-8 sm:py-9">
       <div className="grid gap-6 lg:grid-cols-[140px_minmax(0,1fr)]">
@@ -98,7 +60,6 @@ export function TechStack() {
                     <span className="block text-sm font-medium text-foreground">
                       {tech.name}
                     </span>
-                  
                   </div>
                 </motion.div>
               </RevealItem>
