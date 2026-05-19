@@ -9,6 +9,8 @@ import { SocialGrid } from "@/components/sections/social-grid";
 import { TechStack } from "@/components/sections/tech-stack";
 import { getPublicPortfolioData } from "@/lib/portfolio-public";
 
+export const dynamic = "force-dynamic";
+
 export default async function Home() {
   const { techStack, experiences, projects } = await getPublicPortfolioData();
   return (
