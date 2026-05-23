@@ -24,7 +24,7 @@ export function Contact() {
     setStatus("sending");
 
     try {
-      const response = await fetch("https://n8n-lhkb.onrender.com/webhook/contact-form", {
+      const response = await fetch("/api/contact", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -210,7 +210,12 @@ export function Contact() {
       </div>
 
       {showDialog && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/75 p-4 backdrop-blur-sm">
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="contact-status-title"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-background/75 p-4 backdrop-blur-sm"
+        >
           <div className="w-full max-w-sm rounded-[1.5rem] border border-border/70 bg-card/95 p-5 shadow-[0_24px_70px_rgba(15,23,42,0.18)]">
             <div className="mb-4 flex items-start justify-between gap-4">
               <div
@@ -239,6 +244,8 @@ export function Contact() {
                 )}
               </div>
               <button
+                type="button"
+                aria-label="Close message status"
                 onClick={() => setShowDialog(false)}
                 className="text-muted-foreground transition-colors duration-200 hover:text-foreground"
               >
@@ -247,7 +254,10 @@ export function Contact() {
             </div>
 
             <div className="space-y-2">
-              <h3 className="text-lg font-medium tracking-[-0.03em] text-foreground">
+              <h3
+                id="contact-status-title"
+                className="text-lg font-medium tracking-[-0.03em] text-foreground"
+              >
                 {dialogMessage.title}
               </h3>
               <p className="text-sm leading-6 text-muted-foreground">

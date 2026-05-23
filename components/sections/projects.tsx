@@ -15,6 +15,7 @@ export function Projects({ projects }: Props) {
 
   return (
     <section id="projects" className="border-t border-border/70 py-8 sm:py-9">
+      <h2 className="sr-only">Featured full stack, blockchain, and AI projects</h2>
       <div className="grid gap-7 lg:grid-cols-[140px_minmax(0,1fr)]">
         <Reveal className="space-y-2">
           <p className="font-mono text-[11px] uppercase tracking-[0.28em] text-muted-foreground">

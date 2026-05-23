@@ -1,9 +1,0 @@
-# *
-User-agent: *
-Allow: /
-
-# Host
-Host: https://www.rohitdebugbugs.in
-
-# Sitemaps
-Sitemap: https://www.rohitdebugbugs.in/sitemap.xml

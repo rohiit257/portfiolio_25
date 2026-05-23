@@ -1,9 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { ArrowDown, MapPin, Sparkles } from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Reveal } from "@/components/reveal";
 
 const ROLES = [
@@ -55,7 +56,14 @@ export function Introduction() {
         <Reveal className="flex lg:justify-start">
           <div className="relative">
             <Avatar className="h-[4.5rem] w-[4.5rem] rounded-[1.2rem] border border-border/70 bg-background/75 shadow-[0_18px_40px_rgba(15,23,42,0.10)] sm:h-[5.25rem] sm:w-[5.25rem] lg:h-24 lg:w-24">
-              <AvatarImage src="/avat.jpg" alt="Rohit Shahi" />
+              <Image
+                src="/avat.jpg"
+                alt="Rohit Shahi portrait"
+                fill
+                priority
+                sizes="(min-width: 1024px) 96px, (min-width: 640px) 84px, 72px"
+                className="object-cover"
+              />
               <AvatarFallback className="rounded-[1.2rem] bg-gradient-to-br from-background via-secondary/70 to-accent/60 font-mono text-lg font-semibold text-foreground sm:text-xl lg:text-[1.7rem]">
                 RS
               </AvatarFallback>
@@ -137,6 +145,7 @@ export function Introduction() {
 
       <Reveal className="border-t border-border/70 pt-7 sm:pt-8" delay={0.1}>
         <div id="about" className="grid gap-5 lg:grid-cols-[140px_minmax(0,1fr)]">
+          <h2 className="sr-only">About Rohit Shahi</h2>
           <div className="font-mono text-[11px] uppercase tracking-[0.28em] text-muted-foreground">
             {"//about"}
           </div>

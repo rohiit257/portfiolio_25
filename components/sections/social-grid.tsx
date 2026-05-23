@@ -63,60 +63,15 @@ export function SocialGrid() {
   useEffect(() => {
     async function fetchContributions() {
       try {
-        const username = "rohiit257";
-        const today = new Date();
-        const oneYearAgo = new Date(today);
-        oneYearAgo.setDate(today.getDate() - 365);
-
-        const query = `
-          query {
-            user(login: "${username}") {
-              contributionsCollection(from: "${oneYearAgo.toISOString()}", to: "${today.toISOString()}") {
-                contributionCalendar {
-                  totalContributions
-                  weeks {
-                    contributionDays {
-                      date
-                      contributionCount
-                    }
-                  }
-                }
-              }
-            }
-          }
-        `;
-
-        const response = await fetch("https://api.github.com/graphql", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${process.env.NEXT_PUBLIC_GITHUB_TOKEN}`,
-          },
-          body: JSON.stringify({ query }),
-        });
+        const response = await fetch("/api/github-contributions");
 
         if (!response.ok) {
           throw new Error("Failed to fetch contribution data");
         }
 
         const json = await response.json();
-        const calendar = json.data.user.contributionsCollection.contributionCalendar;
-
-        setTotalContributions(calendar.totalContributions);
-
-        const days: ContributionDay[] = [];
-        calendar.weeks.forEach((week: any) => {
-          week.contributionDays.forEach((day: any) => {
-            const count = day.contributionCount;
-            days.push({
-              date: day.date,
-              count,
-              level: count === 0 ? 0 : count <= 2 ? 1 : count <= 4 ? 2 : count <= 6 ? 3 : 4,
-            });
-          });
-        });
-
-        setContributions(days);
+        setTotalContributions(json.totalContributions ?? 0);
+        setContributions(json.contributions ?? []);
       } catch {
         // Keep the UI stable if GitHub data is unavailable.
       } finally {
@@ -151,7 +106,8 @@ export function SocialGrid() {
   const mobileWeekStartIndex = Math.max(weeks.length - 26, 0);
 
   return (
-    <section className="border-t border-border/70 py-7 sm:py-9">
+    <section id="network" className="border-t border-border/70 py-7 sm:py-9">
+      <h2 className="sr-only">Rohit Shahi social links and developer activity</h2>
       <div className="grid gap-6 lg:grid-cols-[140px_minmax(0,1fr)]">
         <Reveal className="space-y-2">
           <p className="font-mono text-[11px] uppercase tracking-[0.28em] text-muted-foreground">
@@ -271,6 +227,9 @@ export function SocialGrid() {
 
       {showContactDialog && (
         <div
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="direct-contact-title"
           className="fixed inset-0 z-50 flex items-center justify-center bg-background/75 p-4 backdrop-blur-sm"
           onClick={() => setShowContactDialog(false)}
         >
@@ -283,12 +242,13 @@ export function SocialGrid() {
                 <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-muted-foreground">
                   {"//direct contact"}
                 </p>
-                <h3 className="text-xl font-medium text-foreground">
+                <h3 id="direct-contact-title" className="text-xl font-medium text-foreground">
                   Let&apos;s connect
                 </h3>
               </div>
               <button
                 type="button"
+                aria-label="Close contact options"
                 onClick={() => setShowContactDialog(false)}
                 className="rounded-full border border-border/70 px-3 py-1 font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground transition-colors duration-200 hover:text-foreground"
               >

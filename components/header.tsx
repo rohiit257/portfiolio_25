@@ -9,16 +9,20 @@ import { useActiveSection } from "@/hooks/use-active-section";
 const SECTION_LABELS: Record<string, string> = {
   home: "//hero",
   about: "//about",
+  stack: "//stack",
   experience: "//experience",
   projects: "//projects",
+  network: "//network",
   contact: "//contact",
 };
 
 const SECTION_IDS = [
   "home",
   "about",
+  "stack",
   "experience",
   "projects",
+  "network",
   "contact",
 ];
 

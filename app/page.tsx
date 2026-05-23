@@ -8,13 +8,22 @@ import { Projects } from "@/components/sections/projects";
 import { SocialGrid } from "@/components/sections/social-grid";
 import { TechStack } from "@/components/sections/tech-stack";
 import { getPublicPortfolioData } from "@/lib/portfolio-public";
+import { PERSON, SEO, SITE_NAME, SITE_URL } from "@/lib/site-config";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 3600;
 
 export default async function Home() {
   const { techStack, experiences, projects } = await getPublicPortfolioData();
+  const jsonLd = buildStructuredData(projects);
+
   return (
     <main className="relative min-h-screen overflow-hidden pb-16 sm:pb-[4.5rem]">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c"),
+        }}
+      />
       <Header />
       <Chatbot />
 
@@ -33,14 +42,14 @@ export default async function Home() {
             </div>
             <div className="flex-1">
               <div className="mx-auto flex h-8 max-w-[14rem] items-center justify-center rounded-full border border-border/60 bg-background/75 px-3 shadow-inner shadow-black/5 sm:max-w-sm sm:px-4">
-                {/* <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground sm:text-[11px] sm:tracking-[0.16em]">
-                  rohitdebugbugs.dev / portfolio
-                </span> */}
               </div>
             </div>
           </div>
 
-          <div className="grid grid-cols-2 border-b border-border/70 md:grid-cols-4">
+          <nav
+            aria-label="Portfolio quick links"
+            className="grid grid-cols-2 border-b border-border/70 md:grid-cols-4"
+          >
             <a
               href="#home"
               className="space-y-1 border-b border-border/60 px-3 py-2.5 transition-colors duration-200 hover:bg-background/35 md:border-b-0 md:border-r md:px-5"
@@ -48,7 +57,7 @@ export default async function Home() {
               <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-muted-foreground">
                 {"//portfolio"}
               </p>
-              <p className="truncate text-[11px] font-medium sm:text-xs">rohitdebugbugs.dev</p>
+              <p className="truncate text-[11px] font-medium sm:text-xs">rohitdebugbugs.in</p>
             </a>
             <a
               href="mailto:rohitshahi581@gmail.com"
@@ -79,7 +88,7 @@ export default async function Home() {
                 <LiveLocalTime />
               </p>
             </div>
-          </div>
+          </nav>
 
           <div className="px-3 py-5 sm:px-5 sm:py-6 lg:px-6 lg:py-7">
             <Introduction />
@@ -99,4 +108,87 @@ export default async function Home() {
       </div>
     </main>
   );
+}
+
+function buildStructuredData(
+  projects: Awaited<ReturnType<typeof getPublicPortfolioData>>["projects"]
+) {
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Person",
+        "@id": `${SITE_URL}/#person`,
+        name: PERSON.name,
+        alternateName: PERSON.handle,
+        url: SITE_URL,
+        image: PERSON.image,
+        email: `mailto:${PERSON.email}`,
+        jobTitle: PERSON.jobTitle,
+        description: SEO.description,
+        nationality: "Indian",
+        knowsAbout: [
+          "Full Stack Development",
+          "Blockchain Engineering",
+          "Solana",
+          "AI Engineering",
+          "Next.js",
+          "React",
+          "TypeScript",
+          "Smart Contracts",
+          "DeFi",
+        ],
+        sameAs: PERSON.sameAs,
+      },
+      {
+        "@type": "WebSite",
+        "@id": `${SITE_URL}/#website`,
+        name: SITE_NAME,
+        alternateName: "rohitdebugbugs",
+        url: SITE_URL,
+        description: SEO.shortDescription,
+        publisher: { "@id": `${SITE_URL}/#person` },
+        inLanguage: "en-US",
+      },
+      {
+        "@type": "Organization",
+        "@id": `${SITE_URL}/#organization`,
+        name: "rohitdebugbugs",
+        url: SITE_URL,
+        founder: { "@id": `${SITE_URL}/#person` },
+        sameAs: PERSON.sameAs,
+      },
+      {
+        "@type": "BreadcrumbList",
+        "@id": `${SITE_URL}/#breadcrumb`,
+        itemListElement: [
+          {
+            "@type": "ListItem",
+            position: 1,
+            name: "Home",
+            item: SITE_URL,
+          },
+        ],
+      },
+      {
+        "@type": "ItemList",
+        "@id": `${SITE_URL}/#projects`,
+        name: "Rohit Shahi software projects",
+        itemListElement: projects.map((project, index) => ({
+          "@type": "ListItem",
+          position: index + 1,
+          item: {
+            "@type": "SoftwareSourceCode",
+            name: project.title,
+            description: project.description,
+            dateCreated: project.year,
+            codeRepository: project.links.github,
+            url: project.links.demo || project.links.github,
+            programmingLanguage: project.tech,
+            creator: { "@id": `${SITE_URL}/#person` },
+          },
+        })),
+      },
+    ],
+  };
 }

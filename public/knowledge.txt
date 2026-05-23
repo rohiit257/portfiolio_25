@@ -10,7 +10,7 @@ Email: rohitshahi581@gmail.com
 LinkedIn: https://www.linkedin.com/in/rohit-shahi-152661253/
 GitHub: https://github.com/rohiit257
 LeetCode: https://leetcode.com/azzyXT
-Portfolio: https://rohitdebugbugs-portfolio.vercel.app
+Portfolio: https://www.rohitdebugbugs.in
 
 --- ABOUT ME ---
 Rohit Shahi is a 21-year-old full-stack developer and blockchain engineer based in India, currently in his final year of Computer Engineering. He works across full-stack development, Solana blockchain, and Agentic AI Workflows. He is part of the School of Solana program. In his free time, he enjoys gaming, music, programming, and thinking deeply about technology.

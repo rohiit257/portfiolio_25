@@ -11,7 +11,8 @@ type Props = {
 
 export function TechStack({ technologies }: Props) {
   return (
-    <section className="border-t border-border/70 py-8 sm:py-9">
+    <section id="stack" className="border-t border-border/70 py-8 sm:py-9">
+      <h2 className="sr-only">Technical stack for full stack, blockchain, and AI engineering</h2>
       <div className="grid gap-6 lg:grid-cols-[140px_minmax(0,1fr)]">
         <Reveal className="space-y-2">
           <p className="font-mono text-[11px] uppercase tracking-[0.28em] text-muted-foreground">

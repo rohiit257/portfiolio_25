@@ -8,7 +8,7 @@ interface ContributionDay {
   level: number;
 }
 
-export function GitHubContributions({ username = "rohitdebugbugs" }: { username?: string }) {
+export function GitHubContributions({ username = "rohiit257" }: { username?: string }) {
   const [contributions, setContributions] = useState<ContributionDay[]>([]);
   const [totalContributions, setTotalContributions] = useState<number>(0);
   const [loading, setLoading] = useState(true);
@@ -17,70 +17,15 @@ export function GitHubContributions({ username = "rohitdebugbugs" }: { username?
   useEffect(() => {
     async function fetchContributions() {
       try {
-        // Calculate date range for last 365 days
-        const today = new Date();
-        const oneYearAgo = new Date(today);
-        oneYearAgo.setDate(today.getDate() - 365 );
-
-        const query = `
-          query {
-            user(login: "${username}") {
-              contributionsCollection(from: "${oneYearAgo.toISOString()}", to: "${today.toISOString()}") {
-                contributionCalendar {
-                  totalContributions
-                  weeks {
-                    contributionDays {
-                      date
-                      contributionCount
-                    }
-                  }
-                }
-              }
-            }
-          }
-        `;
-
-        const response = await fetch("https://api.github.com/graphql", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${process.env.NEXT_PUBLIC_GITHUB_TOKEN}`,
-          },
-          body: JSON.stringify({ query }),
-        });
+        const response = await fetch("/api/github-contributions");
 
         if (!response.ok) {
           throw new Error("Failed to fetch contribution data");
         }
-        console.log(response)
+
         const json = await response.json();
-        const calendar =
-          json.data.user.contributionsCollection.contributionCalendar;
-
-        setTotalContributions(calendar.totalContributions);
-
-        const days: ContributionDay[] = [];
-        calendar.weeks.forEach((week: any) => {
-          week.contributionDays.forEach((day: any) => {
-            const count = day.contributionCount;
-            days.push({
-              date: day.date,
-              count,
-              level:
-                count === 0
-                  ? 0
-                  : count <= 2
-                  ? 1
-                  : count <= 4
-                  ? 2
-                  : count <= 6
-                  ? 3
-                  : 4,
-            });
-          });
-        });
-
-        setContributions(days);
+        setTotalContributions(json.totalContributions ?? 0);
+        setContributions(json.contributions ?? []);
         setLoading(false);
       } catch (err) {
         setError(err instanceof Error ? err.message : "An error occurred");
@@ -89,7 +34,7 @@ export function GitHubContributions({ username = "rohitdebugbugs" }: { username?
     }
 
     fetchContributions();
-  }, [username]);
+  }, []);
 
   const getLevelColor = (level: number) => {
     switch (level) {

@@ -15,13 +15,22 @@ export function LoadingScreen({ children }: { children?: React.ReactNode }) {
   const [isFading, setIsFading] = useState(false);
 
   useEffect(() => {
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+
+    if (prefersReducedMotion) {
+      setIsLoading(false);
+      return;
+    }
+
     const fadeTimer = window.setTimeout(() => {
       setIsFading(true);
-    }, 1800);
+    }, 420);
 
     const hideTimer = window.setTimeout(() => {
       setIsLoading(false);
-    }, 2300);
+    }, 700);
 
     return () => {
       window.clearTimeout(fadeTimer);

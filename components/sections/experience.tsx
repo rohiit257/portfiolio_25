@@ -12,6 +12,7 @@ type Props = {
 export function Experience({ experiences }: Props) {
   return (
     <section id="experience" className="border-t border-border/70 py-7 sm:py-9">
+      <h2 className="sr-only">Professional experience and Solana training</h2>
       <div className="grid gap-6 lg:grid-cols-[140px_minmax(0,1fr)]">
         <Reveal className="space-y-2">
           <p className="font-mono text-[11px] uppercase tracking-[0.28em] text-muted-foreground">
