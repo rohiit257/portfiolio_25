@@ -29,7 +29,7 @@ export const metadata: Metadata = {
     'WebSockets',
     'Portfolio'
   ],
-  authors: [{ name: 'Rohit Shahi', url: 'https://rohitdebugbugs-portfolio.vercel.app' }],
+  authors: [{ name: 'Rohit Shahi', url: 'https://www.rohitdebugbugs.in/' }],
   creator: 'Rohit Shahi',
   publisher: 'Rohit Shahi',
   formatDetection: {
@@ -37,14 +37,14 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
-  metadataBase: new URL('https://rohitdebugbugs-portfolio.vercel.app'),
+  metadataBase: new URL('https://www.rohitdebugbugs.in/'),
   alternates: {
     canonical: '/',
   },
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: 'https://rohitdebugbugs-portfolio.vercel.app',
+    url: 'https://www.rohitdebugbugs.in/',
     title: 'Rohit Shahi - Full Stack Developer & Blockchain Engineer',
     description: 'Full Stack Developer specializing in Solana blockchain, smart contracts, AI/ML, and scalable web applications. Explore my projects and experience.',
     siteName: 'Rohit Shahi Portfolio',
@@ -118,8 +118,8 @@ export const metadata: Metadata = {
   applicationName: 'Rohit Shahi Portfolio',
   generator: 'Next.js',
   abstract: 'Portfolio website showcasing full-stack development and blockchain engineering projects by Rohit Shahi.',
-  archives: ['https://rohitdebugbugs-portfolio.vercel.app/sitemap.xml'],
-  bookmarks: ['https://rohitdebugbugs-portfolio.vercel.app'],
+  archives: ['https://www.rohitdebugbugs.in/sitemap.xml'],
+  bookmarks: ['https://www.rohitdebugbugs.in/'],
   other: {
     'mobile-web-app-capable': 'yes',
     'apple-mobile-web-app-capable': 'yes',
