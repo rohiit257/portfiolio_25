@@ -34,9 +34,13 @@ export const projects: Project[] = [
     role: "Design & Development",
     tags: ["WEB3", "AI"],
     color: "hsl(270, 60%, 55%)",
+    heroImage:
+      "https://res.cloudinary.com/dgsi6qp2u/image/upload/v1793883116/portfolio/nalz7dnlo5daq0mnbchy.png",
     fullDescription:
       "MetaBazaar is a decentralized NFT marketplace supporting minting, trading and royalties through Ethereum smart contracts written in Solidity and deployed with Hardhat. AI tools power personalized NFT generation, and IPFS provides decentralized asset storage. An admin dashboard adds analytics and social interaction features, giving creators and collectors a complete on-chain ecosystem.",
-    galleryImages: [],
+    galleryImages: [
+      "https://res.cloudinary.com/dgsi6qp2u/image/upload/v1793883116/portfolio/nalz7dnlo5daq0mnbchy.png",
+    ],
   },
   {
     id: "agentic-ml-pipeline",

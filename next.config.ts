@@ -16,6 +16,16 @@ const nextConfig: NextConfig = {
   // Compress output
   compress: true,
 
+  // Remote image optimization domains
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "res.cloudinary.com",
+      },
+    ],
+  },
+
   // Security & performance headers
   async headers() {
     return [
