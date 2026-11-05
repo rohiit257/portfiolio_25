@@ -1,14 +1,9 @@
-import { AdminDashboard } from "@/components/admin/admin-dashboard";
+import type { Metadata } from "next";
+import Admin from "@/pages/Admin";
 
-export const metadata = {
-  title: "Admin | Portfolio",
-  robots: { index: false, follow: false },
+export const metadata: Metadata = {
+  title: "Portfolio Admin",
+  robots: { index: false, follow: false, noarchive: true },
 };
 
-export default function AdminPage() {
-  return (
-    <main className="min-h-screen bg-background">
-      <AdminDashboard />
-    </main>
-  );
-}
+export default Admin;

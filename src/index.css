@@ -1,0 +1,193 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 
+  DESIGN SYSTEM — Editorial Portfolio
+  Inspired by Marco Coppeto / Wolff Olins
+  All colors are HSL.
+*/
+
+@layer base {
+  :root {
+    /* Core palette - Light mode */
+    --background: 0 0% 100%;
+    --foreground: 0 0% 8%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 8%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 8%;
+
+    --primary: 0 0% 8%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 0 0% 96%;
+    --secondary-foreground: 0 0% 8%;
+
+    --muted: 0 0% 96%;
+    --muted-foreground: 0 0% 45%;
+
+    --accent: 0 0% 96%;
+    --accent-foreground: 0 0% 8%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 0 0% 90%;
+    --input: 0 0% 90%;
+    --ring: 0 0% 8%;
+
+    --radius: 0rem;
+
+    /* Custom tokens */
+    --surface-dark: 0 0% 8%;
+    --surface-dark-foreground: 0 0% 100%;
+    --surface-elevated: 0 0% 12%;
+    --text-muted: 0 0% 60%;
+    --text-subtle: 0 0% 70%;
+    --divider: 0 0% 20%;
+    --divider-light: 0 0% 88%;
+
+    /* Sidebar defaults */
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 0 0% 26%;
+    --sidebar-primary: 0 0% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 0 0% 96%;
+    --sidebar-accent-foreground: 0 0% 10%;
+    --sidebar-border: 0 0% 91%;
+    --sidebar-ring: 0 0% 60%;
+  }
+
+  .dark {
+    --background: 0 0% 6%;
+    --foreground: 0 0% 96%;
+
+    --card: 0 0% 8%;
+    --card-foreground: 0 0% 96%;
+
+    --popover: 0 0% 8%;
+    --popover-foreground: 0 0% 96%;
+
+    --primary: 0 0% 96%;
+    --primary-foreground: 0 0% 8%;
+
+    --secondary: 0 0% 14%;
+    --secondary-foreground: 0 0% 96%;
+
+    --muted: 0 0% 14%;
+    --muted-foreground: 0 0% 60%;
+
+    --accent: 0 0% 14%;
+    --accent-foreground: 0 0% 96%;
+
+    --destructive: 0 62% 30%;
+    --destructive-foreground: 0 0% 96%;
+
+    --border: 0 0% 18%;
+    --input: 0 0% 18%;
+    --ring: 0 0% 80%;
+
+    --surface-dark: 0 0% 4%;
+    --surface-dark-foreground: 0 0% 96%;
+    --surface-elevated: 0 0% 12%;
+    --text-muted: 0 0% 55%;
+    --text-subtle: 0 0% 45%;
+    --divider: 0 0% 22%;
+    --divider-light: 0 0% 18%;
+
+    --sidebar-background: 0 0% 10%;
+    --sidebar-foreground: 0 0% 96%;
+    --sidebar-primary: 0 0% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 0 0% 16%;
+    --sidebar-accent-foreground: 0 0% 96%;
+    --sidebar-border: 0 0% 16%;
+    --sidebar-ring: 0 0% 60%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: 'Satoshi', system-ui, sans-serif;
+  }
+
+  /* Typography utilities */
+  .font-sans {
+    font-family: 'Satoshi', system-ui, sans-serif;
+  }
+
+  /* Editorial headline styles */
+  .headline-xl {
+    @apply text-5xl md:text-7xl lg:text-8xl font-bold leading-[0.95] tracking-[-0.02em];
+  }
+
+  .headline-lg {
+    @apply text-4xl md:text-5xl lg:text-6xl font-bold leading-[1] tracking-[-0.02em];
+  }
+
+  .headline-md {
+    @apply text-3xl md:text-4xl font-bold leading-[1.1] tracking-[-0.01em];
+  }
+
+  .headline-sm {
+    @apply text-2xl md:text-3xl font-medium leading-[1.15];
+  }
+
+  /* Body text styles */
+  .body-lg {
+    @apply text-lg md:text-xl leading-[1.6] font-light;
+  }
+
+  .body-md {
+    @apply text-base md:text-lg leading-[1.7];
+  }
+
+  .body-sm {
+    @apply text-sm leading-[1.6];
+  }
+
+  /* Label styles */
+  .label-sm {
+    @apply text-xs uppercase tracking-[0.15em] font-medium;
+  }
+
+  .label-md {
+    @apply text-sm uppercase tracking-[0.1em] font-medium;
+  }
+
+  /* Horizontal rule - editorial style */
+  .divider-editorial {
+    @apply w-full h-px bg-divider-light;
+  }
+
+  .divider-editorial-dark {
+    @apply w-full h-px bg-divider;
+  }
+}
+
+/* Animation utilities */
+@layer utilities {
+  .transition-opacity-transform {
+    @apply transition-all duration-300 ease-out;
+  }
+
+  .hover-lift {
+    @apply transition-transform duration-300 ease-out hover:-translate-y-1;
+  }
+
+  .hover-fade {
+    @apply transition-opacity duration-200 ease-out hover:opacity-70;
+  }
+}

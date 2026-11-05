@@ -1,123 +1,37 @@
-import './globals.css';
-import type { Metadata } from 'next';
-import { ThemeProvider } from '@/components/theme-provider';
-import { LoadingScreen } from '@/components/loading-screen';
-import { Toaster } from 'sonner';
-import { SEO, SITE_NAME, SITE_URL, absoluteUrl, getSearchVerification } from '@/lib/site-config';
+import type { Metadata } from "next";
+import "../src/index.css";
+import { SiteProviders } from "./providers";
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://rohitdebugbugs.in"),
   title: {
-    default: SEO.title,
-    template: '%s | Rohit Shahi'
+    default: "Rohit Shahi | Software Engineer",
+    template: "%s | Rohit Shahi",
   },
-  description: SEO.description,
-  keywords: SEO.keywords,
-  authors: [{ name: 'Rohit Shahi', url: SITE_URL }],
-  creator: 'Rohit Shahi',
-  publisher: 'Rohit Shahi',
-  formatDetection: {
-    email: false,
-    address: false,
-    telephone: false,
-  },
-  metadataBase: new URL(SITE_URL),
-  alternates: {
-    canonical: '/',
-  },
+  description: "Rohit Shahi is a Mumbai-based software engineer building agentic AI systems, real-time web platforms, and full-stack products.",
+  applicationName: "Rohit Shahi Portfolio",
+  creator: "Rohit Shahi",
+  authors: [{ name: "Rohit Shahi", url: "https://rohitdebugbugs.in" }],
+  alternates: { canonical: "/" },
+  robots: { index: true, follow: true, googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1, "max-video-preview": -1 } },
   openGraph: {
-    type: 'website',
-    locale: 'en_US',
-    url: SITE_URL,
-    title: SEO.title,
-    description: SEO.description,
-    siteName: SITE_NAME,
-    images: [
-      {
-        url: '/opengraph-image',
-        width: 1200,
-        height: 630,
-        alt: 'Rohit Shahi - Full Stack Developer, Blockchain and AI Engineer',
-      },
-    ],
+    type: "website",
+    url: "https://rohitdebugbugs.in/",
+    siteName: "Rohit Shahi",
+    locale: "en_IN",
+    title: "Rohit Shahi | Software Engineer",
+    description: "Agentic AI systems, real-time platforms, and full-stack products by Rohit Shahi.",
+    images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "Rohit Shahi — Software Engineer" }],
   },
   twitter: {
-    card: 'summary_large_image',
-    title: SEO.title,
-    description: SEO.description,
-    images: ['/opengraph-image'],
-    creator: '@rohitdebugbugs',
+    card: "summary_large_image",
+    title: "Rohit Shahi | Software Engineer",
+    description: "Agentic AI systems, real-time platforms, and full-stack products by Rohit Shahi.",
+    images: ["/opengraph-image"],
   },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
-    },
-  },
-  verification: getSearchVerification(),
-  category: 'technology',
-  classification: 'Portfolio Website',
-  referrer: 'origin-when-cross-origin',
-  icons: {
-    icon: [{ url: '/avat.jpg', type: 'image/jpeg' }],
-    apple: [{ url: '/avat.jpg', type: 'image/jpeg' }],
-  },
-  appleWebApp: {
-    capable: true,
-    title: 'Rohit Shahi Portfolio',
-    statusBarStyle: 'black-translucent',
-  },
-  applicationName: 'Rohit Shahi Portfolio',
-  generator: 'Next.js',
-  abstract: 'Portfolio website showcasing full-stack development and blockchain engineering projects by Rohit Shahi.',
-  archives: [absoluteUrl('/sitemap.xml')],
-  bookmarks: [SITE_URL],
-  other: {
-    'mobile-web-app-capable': 'yes',
-    'apple-mobile-web-app-capable': 'yes',
-    'apple-mobile-web-app-status-bar-style': 'black-translucent',
-    'msapplication-TileColor': '#000000',
-  },
+  icons: { icon: "/favicon.ico" },
 };
 
-export const viewport = {
-  width: 'device-width',
-  initialScale: 1,
-  maximumScale: 5,
-  colorScheme: 'dark light',
-  themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#ece7e1' },
-    { media: '(prefers-color-scheme: dark)', color: '#111111' },
-  ],
-};
-
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  return (
-    <html lang="en" suppressHydrationWarning>
-      <body className="font-sans">
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="dark"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <LoadingScreen>
-            <div className="bg-animated" />
-            <div className="relative">
-              {children}
-              <Toaster />
-            </div>
-          </LoadingScreen>
-        </ThemeProvider>
-      </body>
-    </html>
-  );
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+  return <html lang="en"><body><SiteProviders>{children}</SiteProviders></body></html>;
 }
