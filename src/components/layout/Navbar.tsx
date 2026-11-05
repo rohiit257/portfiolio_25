@@ -56,6 +56,7 @@ export function Navbar({ variant = "light" }: NavbarProps) {
         {/* Left: Name/Location */}
         <Link
           href="/"
+          aria-label="Rohit Shahi — Return to homepage"
           className={cn(
             "text-xs uppercase tracking-[0.12em] font-medium transition-opacity hover:opacity-60",
             isDark ? "text-white" : "text-black"
@@ -71,7 +72,8 @@ export function Navbar({ variant = "light" }: NavbarProps) {
         </Link>
 
         {/* Center: Floating Toggle Menu with Sliding Indicator */}
-        <div
+        <nav
+          aria-label="View toggle"
           className={cn(
             "fixed right-6 md:right-auto md:left-1/2 md:-translate-x-1/2 top-5 lg:top-8 lg:right-auto flex items-center rounded-full transition-all duration-300 bg-gray-900",
             scrolled
@@ -81,6 +83,7 @@ export function Navbar({ variant = "light" }: NavbarProps) {
         >
           {/* Sliding white indicator */}
           <div
+            aria-hidden="true"
             className={cn(
               "absolute top-0 h-full w-14 bg-white rounded-full transition-all duration-300 ease-out",
               isGridActive ? "left-0" : "left-14"
@@ -90,6 +93,7 @@ export function Navbar({ variant = "light" }: NavbarProps) {
           {/* Grid button */}
           <Link
             href="/"
+            aria-label="View portfolio in grid layout"
             className={cn(
               "relative z-10 flex items-center justify-center w-14 h-10 transition-colors duration-300",
               isGridActive
@@ -103,6 +107,7 @@ export function Navbar({ variant = "light" }: NavbarProps) {
           {/* List button */}
           <Link
             href="/work"
+            aria-label="View portfolio in list layout"
             className={cn(
               "relative z-10 flex items-center justify-center w-14 h-10 transition-colors duration-300",
               isListActive
@@ -112,7 +117,7 @@ export function Navbar({ variant = "light" }: NavbarProps) {
           >
             <ListIcon />
           </Link>
-        </div>
+        </nav>
 
         {/* Right: Social Links + Contacts (hidden on mobile) */}
         <div className="hidden md:flex items-center gap-4">
@@ -121,6 +126,7 @@ export function Navbar({ variant = "light" }: NavbarProps) {
               href={content.contact.linkedin}
               target="_blank"
               rel="noopener noreferrer"
+              aria-label="Rohit Shahi on LinkedIn"
               className={cn(
                 "text-xs uppercase tracking-wide font-medium transition-colors inline-flex items-center gap-1",
                 isDark
@@ -128,10 +134,11 @@ export function Navbar({ variant = "light" }: NavbarProps) {
                   : "text-gray-500 hover:text-black"
               )}
             >
-              LIN<span className="text-[10px]">↗</span>
+              LIN<span className="text-[10px]" aria-hidden="true">↗</span>
             </a>
             <a
               href={`mailto:${content.contact.email}`}
+              aria-label="Email Rohit Shahi"
               className={cn(
                 "text-xs uppercase tracking-wide font-medium transition-colors inline-flex items-center gap-1",
                 isDark
@@ -139,7 +146,7 @@ export function Navbar({ variant = "light" }: NavbarProps) {
                   : "text-gray-500 hover:text-black"
               )}
             >
-              EM<span className="text-[10px]">↗</span>
+              EM<span className="text-[10px]" aria-hidden="true">↗</span>
             </a>
           </div>
           <Link

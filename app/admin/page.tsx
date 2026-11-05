@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Admin from "@/pages/Admin";
+import Admin from "@/views/Admin";
 
 export const metadata: Metadata = {
   title: "Portfolio Admin",

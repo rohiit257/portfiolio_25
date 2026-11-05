@@ -86,6 +86,7 @@ export default function Admin() {
 }
 
 function Field({ label, children }: { label: string; children: React.ReactNode }) { return <label className="block text-xs uppercase tracking-widest text-gray-500">{label}<div className="mt-2">{children}</div></label>; }
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function JsonField({ label, value, onChange, rows = 8 }: { label: string; value: unknown; onChange: (value: any) => void; rows?: number }) {
   const [text, setText] = useState(JSON.stringify(value, null, 2));
   useEffect(() => setText(JSON.stringify(value, null, 2)), [value]);

@@ -34,6 +34,7 @@ const Index = () => {
         <section className="pt-32 pb-20 md:pt-40 md:pb-28 bg-white">
           <div className="container">
             <h1 className="text-3xl md:text-5xl lg:text-6xl xl:text-7xl font-medium text-black leading-[1.1] tracking-[-0.02em] max-w-6xl">
+              <span className="sr-only">Rohit Shahi — </span>
               {hero}
             </h1>
           </div>
@@ -48,7 +49,7 @@ const Index = () => {
               {/* Left Column - Lists */}
               <div className="lg:col-span-4 space-y-14">
                 <div>
-                  <h3 className="text-xs uppercase tracking-[0.15em] font-medium text-gray-500 mb-6">Work</h3>
+                  <h2 className="text-xs uppercase tracking-[0.15em] font-medium text-gray-500 mb-6">Work</h2>
                   <div className="space-y-5">
                     {experience.map((item) => (
                       <div key={item.company}>
@@ -61,7 +62,7 @@ const Index = () => {
                 </div>
 
                 <div>
-                  <h3 className="text-xs uppercase tracking-[0.15em] font-medium text-gray-500 mb-6">Education</h3>
+                  <h2 className="text-xs uppercase tracking-[0.15em] font-medium text-gray-500 mb-6">Education</h2>
                   <div className="space-y-5">
                     {education.map((item) => (
                       <div key={item.school}>
@@ -82,7 +83,7 @@ const Index = () => {
 
                 {/* Interests */}
                 <div>
-                  <h3 className="text-xs uppercase tracking-[0.15em] font-medium text-gray-500 mb-6">Interests</h3>
+                  <h2 className="text-xs uppercase tracking-[0.15em] font-medium text-gray-500 mb-6">Interests</h2>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-8">
                     {interests.map((item) => (
                       <div key={item.title} className="border-t border-gray-200 pt-4">
@@ -101,7 +102,7 @@ const Index = () => {
         {/* Projects */}
         <section className="bg-white border-t border-gray-200">
           <div className="container pt-16 md:pt-24">
-            <h3 className="text-xs uppercase tracking-[0.15em] font-medium text-gray-500 mb-10">Projects</h3>
+            <h2 className="text-xs uppercase tracking-[0.15em] font-medium text-gray-500 mb-10">Projects</h2>
           </div>
           <ProjectGrid embedded />
         </section>
@@ -109,7 +110,7 @@ const Index = () => {
         {/* Stack Section */}
         <section className="py-20 md:py-24 bg-white border-t border-gray-200">
           <div className="container">
-            <h3 className="text-xs uppercase tracking-[0.15em] font-medium text-gray-500 mb-12">Stack</h3>
+            <h2 className="text-xs uppercase tracking-[0.15em] font-medium text-gray-500 mb-12">Stack</h2>
           </div>
           <StackMarquee />
         </section>
